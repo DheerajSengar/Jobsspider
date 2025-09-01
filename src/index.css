@@ -1,0 +1,73 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+/* //////////////////////// */
+
+
+ .textMove {
+  float: right;
+  position: relative;
+  left: 120px;
+  overflow:hidden;
+  margin-top: 20px;
+  font-family: ubuntu;
+  font-size: 50px;
+  color:#ccc;
+  width: 260px;
+  text-wrap: nowrap;
+  
+  height: 60px;
+
+  
+  animation:outAnimation  1s 0.5s ease-out forwards;
+  
+  
+}
+@keyframes outAnimation {
+  to {
+    left: 20%;
+    width: 310px;
+    
+  }
+  
+   
+  
+}
+.text {
+  float: right;
+  position: relative;
+  left: 120px;
+  overflow:hidden;
+  margin-top: 20px;
+  font-family: ubuntu;
+  font-size: 50px;
+  color:#ccc;
+  width: 260px;
+  text-wrap: nowrap;
+  height: 60px;
+  animation:inAnimation  1s 0.5s ease-out backwards;
+  
+  
+}
+@keyframes inAnimation {
+  from {
+    left: 20%;
+    width:310px;
+    
+  }
+  to {
+    right:0%;
+    width:260px;
+    overflow: hidden;
+    
+  }
+}
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
