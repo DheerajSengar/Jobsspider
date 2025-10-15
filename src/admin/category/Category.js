@@ -117,7 +117,7 @@ export default function Category() {
               Upload
             </Button>
           </Grid>
-
+                  
           <Grid size={6}>
             <Button fullWidth variant="contained" onClick={handleClick}>
               Save
