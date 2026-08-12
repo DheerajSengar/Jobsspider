@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   TextField,
   Button,
@@ -15,56 +15,44 @@ import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
 import PlaceOutlinedIcon from "@mui/icons-material/PlaceOutlined";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { useNavigate, createSearchParams } from "react-router-dom";
-import { useState,useEffect } from "react";
-
+import { useNavigate } from "react-router-dom";
 import { getData } from "../../services/FetchNodeServices";
-export default function SearchBarComponent({ param_skill,refresh,setRefresh,exp,setExp }) {
-  console.log("HOME SKILL:", param_skill);
+
+export default function SearchBarComponent({ param_skill, refresh, setRefresh, exp, setExp }) {
   const theme = useTheme();
- 
   const matches = useMediaQuery(theme.breakpoints.down("sm"));
   const navigate = useNavigate();
-  const [skill, setSkill] = useState({ skillid: 0,categoryid:0,subcategoryid:0,skills: "" });
-  const [topSkill,setTopSkill]=useState([])
-  const [expr,setExpr]=useState(0)
   
-  const fetchAllSkill=async()=>{
-    var res=await getData('userinterface/fetch_all_skills')
-    setTopSkill(res.data)
+  const [skill, setSkill] = useState({ skillid: 0, categoryid: 0, subcategoryid: 0, skills: "" });
+  const [topSkill, setTopSkill] = useState([]);
+  const [expr, setExpr] = useState(0);
 
-  }
- useEffect(function(){
-fetchAllSkill()
-
- },[])
- const handleExperience=(e)=>{
-  alert(JSON.stringify(e.target.value))
- }
-  const handleSearch = () => {
-    //navigate("/searchjobs",{state:{skill:skill}})
-    var tskill=skill
-    if(exp==undefined)
-    tskill['exp']=expr
-    else
-    tskill['exp']=exp
-    const queryString = new URLSearchParams(skill).toString();
-    navigate(`/searchjobs?${queryString}`);
-   try{setRefresh(!refresh)}catch(e){}
-
+  const fetchAllSkill = async () => {
+    try {
+      const res = await getData('userinterface/fetch_all_skills');
+      if (res && res.data) {
+        setTopSkill(res.data);
+      }
+    } catch (error) {
+      console.error('Error fetching skills:', error);
+      setTopSkill([]);
+    }
   };
-/*  const topSkill = [
-    { Skillid: 1, Skill: "MERN" },
-    { Skillid: 2, Skill: "Node.js" },
-    { Skillid: 3, Skill: "React.js" },
-    { Skillid: 4, Skill: "Angular" },
-    { Skillid: 5, Skill: "Vue.js" },
-    { Skillid: 6, Skill: "Python" },
-    { Skillid: 7, Skill: "Django" },
-    { Skillid: 8, Skill: "Ruby on Rails" },
-    { Skillid: 9, Skill: "Java" },
-  ];
-*/
+
+  useEffect(() => {
+    fetchAllSkill();
+  }, []);
+
+  const handleSearch = () => {
+    const tskill = { ...skill };
+    tskill['exp'] = exp !== undefined ? exp : expr;
+    const queryString = new URLSearchParams(tskill).toString();
+    navigate(`/searchjobs?${queryString}`);
+    
+    if (setRefresh) {
+      setRefresh(!refresh);
+    }
+  };
   const experience = [
     { expid: 0, exp: "Fresher" },
     { expid: 1, exp: "1 year" },
@@ -183,13 +171,13 @@ fetchAllSkill()
           sx={{ flexGrow: 1 }}
           options={experience}
           onChange={(event, newValue) => {
-           try{
-            setExp(newValue.expid);
-           }
-           catch(e){
-            setExpr(newValue.expid)
-           }
-            
+            if (newValue) {
+              if (setExp) {
+                setExp(newValue.expid);
+              } else {
+                setExpr(newValue.expid);
+              }
+            }
           }}
           value={experience[exp]}
           PopperComponent={CustomPopper}
@@ -271,17 +259,6 @@ fetchAllSkill()
             <TextField
               {...params}
               sx={{
-                // '& .MuiOutlinedInput-root': {
-                //   '& fieldset': {
-                //     border: 'none',
-                //   },
-                //   '&:hover fieldset': {
-                //     border: 'none',
-                //   },
-                //   '&.Mui-focused fieldset': {
-                //     border: 'none',
-                //   },
-                // },
                 "& .MuiInputBase-input": {
                   outline: "none",
                   fontSize: "14px",

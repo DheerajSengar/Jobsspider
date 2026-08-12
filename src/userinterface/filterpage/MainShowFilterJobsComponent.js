@@ -1,56 +1,54 @@
-import { Grid2 } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useLocation } from "react-router-dom";
 import FirstFilterComponent from "./FilterFirstComponent";
 import FilterMiddleComponent from "./FilterMiddleComponent";
 import FilterLastComponent from "./FilterLastComponent";
-
 import SearchBarComponent from "../components/SearchBarComponent";
 import SearchBarMob from "../components/SearchBarMob";
-import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
-import PinDropIcon from "@mui/icons-material/PinDrop";
-import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import Header from "../components/Header";
 import UserReviewComponent from "../components/UserReviewComponent";
-import { useLocation, useParams } from "react-router-dom";
-import { useEffect,useState } from "react";
-import { postData,getData } from "../../services/FetchNodeServices";
+import { postData } from "../../services/FetchNodeServices";
+
 export default function ShowFilterJobsComponent() {
   const theme = useTheme();
-  const [jobs,setJobsList]=useState([])
-  const params = useParams();
-  const [refresh,setRefresh]=useState(false)  
-  //const [exp,setExp]=useState(0)
-  const location = useLocation();
-  console.log(location.search);
-  const keys = new URLSearchParams(location.search);
-  console.log("Keys:",keys)
-
-  var skill = keys.get("skills");
-  var skill_id = keys.get("skillid");
-  var categoryid = keys.get("categoryid");
-  var subcategoryid = keys.get("subcategoryid");
-  var expr = keys.get("exp");
-  const [exp,setExp]=useState(expr)
-  const [time,setTime]=useState("-1")
-
   const matches = useMediaQuery(theme.breakpoints.down("sm"));
-
-  const fetchJobs=async()=>{
-    
-      
-    var res=await postData('userinterface/main_search_jobs',{ skills: skill, skillid: skill_id,categoryid,subcategoryid,expr:exp,time})
+  const location = useLocation();
   
-    setJobsList(res.data)
-   }
-  useEffect(function(){
-    setJobsList([])
-    fetchJobs()
-  },[refresh])
+  const keys = new URLSearchParams(location.search);
+  const skill = keys.get("skills");
+  const skill_id = keys.get("skillid");
+  const categoryid = keys.get("categoryid");
+  const subcategoryid = keys.get("subcategoryid");
+  const expr = keys.get("exp");
+  
+  const [jobs, setJobsList] = useState([]);
+  const [refresh, setRefresh] = useState(false);
+  const [exp, setExp] = useState(expr);
+  const [time, setTime] = useState("-1");
 
-  useEffect(function(){
-    
-    fetchJobs()
-  },[])
+  const fetchJobs = async () => {
+    try {
+      const res = await postData('userinterface/main_search_jobs', { 
+        skills: skill, 
+        skillid: skill_id, 
+        categoryid, 
+        subcategoryid, 
+        expr: exp, 
+        time 
+      });
+      setJobsList(res.data || []);
+    } catch (error) {
+      console.error('Error fetching jobs:', error);
+      setJobsList([]);
+    }
+  };
+
+  useEffect(() => {
+    setJobsList([]);
+    fetchJobs();
+  }, [refresh, exp, time]);
 
   return (
     <div
@@ -110,7 +108,7 @@ export default function ShowFilterJobsComponent() {
             fontWeight: "bold",
           }}
         >
-          Showing 210 jobs based on your filter
+          Showing {jobs.length} jobs based on your filter
         </div>
 
         <div
@@ -120,8 +118,7 @@ export default function ShowFilterJobsComponent() {
             justifyContent: "center",
           }}
         >
-          {matches ? <></> : <FirstFilterComponent time={time}
-              setTime={setTime}  exp={exp} setExp={setExp}/>}
+          {!matches && <FirstFilterComponent time={time} setTime={setTime} exp={exp} setExp={setExp} />}
 
           <FilterMiddleComponent jobData={jobs} />
 

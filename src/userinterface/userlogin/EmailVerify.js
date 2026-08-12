@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 
 import { homeStyles } from "./HomeCss";
 import  Grid  from '@mui/material/Grid2';
- import mobile from '../../assets/mobile.png'
+import mobile from '../../assets/mobile.png'
 import { TextField } from '@mui/material';
 import { generateOtp } from '../../services/FetchNodeServices';
 import { useEffect,useState } from 'react';
