@@ -1,297 +1,1253 @@
-# JobSpider - Full-Stack Production Job Portal
+# JobSpider — Full-Stack Job Portal
 
-JobSpider is a production-grade full-stack web application designed to connect job seekers with employers. It provides job searching, advanced filtering by category/subcategory/experience/posted date, job applications, job bookmarking, candidate management, and a dedicated Admin Dashboard for managing companies, verification, skills, categories, and job postings.
+JobSpider is a full-stack job portal designed to connect **job seekers, companies, and administrators** through a centralized recruitment platform.
+
+The application provides job discovery, advanced search and filtering, job applications, saved jobs, application tracking, company management, job verification, and an administrative dashboard.
+
+It also supports **Google OAuth 2.0 authentication**, JWT-based authorization, MySQL database integration, and production deployment using **Render + Cloud MySQL**.
 
 ---
 
-## Features
+## Table of Contents
+
+* [Overview](#overview)
+* [Key Features](#key-features)
+* [User Roles](#user-roles)
+* [Tech Stack](#tech-stack)
+* [Application Architecture](#application-architecture)
+* [Project Structure](#project-structure)
+* [Core Modules](#core-modules)
+* [Authentication & Authorization](#authentication--authorization)
+* [Database](#database)
+* [Environment Variables](#environment-variables)
+* [Local Development](#local-development)
+* [Google Sign-In Setup](#google-sign-in-setup)
+* [Cloud MySQL Setup](#cloud-mysql-setup)
+* [Production Deployment](#production-deployment)
+* [API Overview](#api-overview)
+* [Security](#security)
+* [Database Migration & Fixes](#database-migration--fixes)
+* [Troubleshooting](#troubleshooting)
+* [Development Guidelines](#development-guidelines)
+* [Future Improvements](#future-improvements)
+* [License](#license)
+
+---
+
+# Overview
+
+JobSpider is built as a production-oriented recruitment platform with separate frontend and backend responsibilities.
 
 ### Job Seekers
-- **User Registration & Login**: Phone/Email verification and Google OAuth 2.0 Sign-In.
-- **Job Search & Advanced Filtering**: Filter jobs by category, subcategory, experience level, salary range, location, and post date.
-- **Job Details & Application**: View full job specifications, company profile, and submit applications.
-- **Bookmarked Jobs**: Save interesting job postings for later review.
-- **Application History**: Track status of submitted job applications.
 
-### Employers & Administrators
-- **Admin Dashboard**: Full CRUD management of job categories, subcategories, job skills, and companies.
-- **Company Verification**: Review and manage company verification status.
-- **Job Management**: Create, edit, and monitor active job postings.
-- **Security & Authorization**: Role-based access control protecting administrative endpoints via JWT token verification.
+Users can:
+
+* Create an account
+* Login using email/phone
+* Sign in with Google
+* Manage their profile
+* Search for jobs
+* Filter jobs using multiple criteria
+* View detailed job information
+* Apply for jobs
+* Save/bookmark jobs
+* Track application history
+* Manage resume/profile information
+
+### Companies & Administrators
+
+Authorized users can:
+
+* Manage companies
+* Verify companies
+* Create job postings
+* Edit job postings
+* Manage job categories
+* Manage subcategories
+* Manage required skills
+* Monitor job postings
+* Manage candidate applications
+* Access protected administrative functionality
 
 ---
 
-## Tech Stack
+# Key Features
 
-- **Frontend**: React 18, Material UI (MUI 6), Redux, React Router v6, Axios, SweetAlert2, `@react-oauth/google`
-- **Backend**: Node.js, Express 4, `mysql2` (Connection Pool & SSL Support), JWT (`jsonwebtoken`), Bcrypt (`bcryptjs`), `google-auth-library`
-- **Database**: MySQL 8.0 / Cloud MySQL (e.g. Aiven MySQL)
-- **Deployment**: Express serves React build bundle for single-service deployment on Render.
+## Authentication
+
+* Email/phone based authentication
+* Google OAuth 2.0 Sign-In
+* JWT-based authentication
+* Password hashing using bcrypt
+* Protected API routes
+* Role-based authorization
+* Token verification middleware
+
+## Job Search
+
+Users can search and filter jobs based on:
+
+* Category
+* Subcategory
+* Experience
+* Salary range
+* Location
+* Posted date
+* Other available job attributes
+
+## Job Applications
+
+Users can:
+
+* View job details
+* Apply for jobs
+* Track submitted applications
+* View application status
+* Manage application-related information
+
+## Saved Jobs
+
+Users can bookmark jobs and access them later from their saved jobs section.
+
+Duplicate bookmarks are prevented using database-level constraints.
+
+## Admin Dashboard
+
+The administration system provides management functionality for:
+
+* Companies
+* Company verification
+* Jobs
+* Categories
+* Subcategories
+* Required skills
+* Users
+* Applications
+
+## UI/UX
+
+The frontend includes:
+
+* Responsive React interface
+* Material UI components
+* Form validation
+* Loading states
+* Error handling
+* Success/error notifications
+* Dashboard-based workflows
+* Responsive job listing and detail pages
 
 ---
 
-## Project Structure
+# User Roles
 
+## Job Seeker
+
+Can:
+
+* Register/login
+* Manage profile
+* Search jobs
+* View jobs
+* Save jobs
+* Apply for jobs
+* Track applications
+
+## Administrator
+
+Can:
+
+* Manage users
+* Manage companies
+* Verify companies
+* Manage categories
+* Manage subcategories
+* Manage skills
+* Manage job postings
+* Manage applications
+* Access protected administrative APIs
+
+Administrative APIs are protected using authorization middleware.
+
+---
+
+# Tech Stack
+
+## Frontend
+
+* React 18
+* Material UI 6
+* Redux
+* React Router v6
+* Axios
+* SweetAlert2
+* `@react-oauth/google`
+
+## Backend
+
+* Node.js
+* Express.js 4
+* MySQL2
+* JWT
+* bcryptjs
+* Google Auth Library
+
+## Database
+
+* MySQL 8+
+* Cloud MySQL compatible
+* Aiven MySQL supported
+
+## Deployment
+
+* Render
+* Cloud MySQL
+* Express serving the production React build
+
+---
+
+# Application Architecture
+
+JobSpider follows a frontend/backend separation with a unified production deployment model.
+
+```text
+                    ┌────────────────────┐
+                    │      User          │
+                    └─────────┬──────────┘
+                              │
+                              ▼
+                    ┌────────────────────┐
+                    │   React Frontend   │
+                    │  React Router      │
+                    │  Redux             │
+                    │  Material UI       │
+                    └─────────┬──────────┘
+                              │
+                         HTTP / REST
+                              │
+                              ▼
+                    ┌────────────────────┐
+                    │  Express Backend   │
+                    │                    │
+                    │ Routes              │
+                    │ Middleware         │
+                    │ Controllers/Logic  │
+                    │ Authentication     │
+                    └─────────┬──────────┘
+                              │
+                         mysql2 Pool
+                              │
+                              ▼
+                    ┌────────────────────┐
+                    │     MySQL DB       │
+                    │                    │
+                    │ Users              │
+                    │ Companies          │
+                    │ Jobs               │
+                    │ Applications       │
+                    │ Saved Jobs         │
+                    │ Categories         │
+                    └────────────────────┘
 ```
+
+### Production Architecture
+
+```text
+User
+ │
+ ▼
+Render Web Service
+ │
+ ├── React Production Build
+ │
+ └── Express REST API
+          │
+          ▼
+     Cloud MySQL
+       (Aiven)
+```
+
+---
+
+# Project Structure
+
+```text
 Jobsspider/
-├── build/                      # Production build output of React frontend
-├── jobsspider_backend/         # Express API Backend
-│   ├── bin/www                 # Server entry point
-│   ├── middleware/             # Auth middleware (verifyToken, verifyAdmin)
-│   ├── routes/                 # Express API routes (admin, userinterface, companyjobs, etc.)
-│   ├── schema.sql              # Database DDL schema & seed data
-│   ├── app.js                  # Express application setup
-│   └── pool.js                 # MySQL pool & automatic schema initializer
-├── public/                     # Public static assets
-├── src/                        # React Frontend Source
-│   ├── admin/                  # Admin dashboard components & views
-│   ├── userinterface/          # User-facing job seeker pages & components
-│   ├── services/               # API service helpers & Redux store
-│   ├── App.js                  # Main Application router
-│   └── index.js                # React root renderer
-├── .env.example                # Frontend/Root environment template
-└── package.json                # Project dependencies & npm scripts
+│
+├── build/
+│   └──                 # React production build
+│
+├── public/
+│   └──                 # Public frontend assets
+│
+├── src/
+│   ├── admin/
+│   │   └──             # Admin dashboard
+│   │
+│   ├── userinterface/
+│   │   └──             # Job seeker interface
+│   │
+│   ├── services/
+│   │   └──             # API services and Redux-related logic
+│   │
+│   ├── App.js
+│   └── index.js
+│
+├── jobsspider_backend/
+│   │
+│   ├── bin/
+│   │   └── www         # Backend server entry point
+│   │
+│   ├── middleware/
+│   │   └──             # Authentication/authorization middleware
+│   │
+│   ├── routes/
+│   │   └──             # API routes
+│   │
+│   ├── schema.sql      # Database schema and seed data
+│   ├── app.js          # Express configuration
+│   └── pool.js         # MySQL connection pool/migrations
+│
+├── .env.example
+├── package.json
+└── README.md
 ```
 
 ---
 
-## Local Setup
+# Core Modules
 
-### 1. Prerequisites
-- Node.js (v18 or higher recommended)
-- MySQL Server 8.0+ running locally or access to a cloud MySQL instance (e.g., Aiven MySQL)
+## User Management
 
-### 2. Installation
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/Jobsspider.git
-cd Jobsspider
+Handles:
 
-# Install frontend & root dependencies
-npm install
+* Registration
+* Login
+* Google authentication
+* User profiles
+* Password handling
+* Resume/profile information
 
-# Install backend dependencies
-cd jobsspider_backend
-npm install
-cd ..
+## Job Management
+
+Handles:
+
+* Job creation
+* Job updates
+* Job deletion
+* Job listing
+* Job details
+* Job filtering
+
+## Application Management
+
+Handles:
+
+* Job applications
+* Application status
+* Application history
+* Candidate information
+
+## Saved Jobs
+
+Handles:
+
+* Save job
+* Remove saved job
+* Retrieve saved jobs
+* Prevent duplicate saved jobs
+
+## Company Management
+
+Handles:
+
+* Company registration
+* Company information
+* Verification
+* Company job postings
+
+## Admin Management
+
+Handles:
+
+* Administrative authentication
+* Authorization
+* CRUD operations
+* Platform management
+
+---
+
+# Authentication & Authorization
+
+JobSpider uses multiple authentication mechanisms.
+
+## JWT Authentication
+
+After successful authentication, the backend generates a JWT.
+
+The token is used to access protected APIs.
+
+```text
+Login
+  │
+  ▼
+Validate credentials
+  │
+  ▼
+Generate JWT
+  │
+  ▼
+Frontend stores authentication state
+  │
+  ▼
+Authenticated API request
+  │
+  ▼
+verifyToken middleware
+  │
+  ▼
+Protected endpoint
 ```
 
-### 3. Environment Setup
-Create a `.env` file in the root folder and in `jobsspider_backend/.env` based on `.env.example`:
+## Password Security
+
+Passwords are hashed using `bcryptjs`.
+
+Plain-text passwords should never be stored in the database.
+
+## Role-Based Authorization
+
+Administrative endpoints use authorization middleware to ensure that only authorized users can perform administrative operations.
+
+---
+
+# Database
+
+The application uses MySQL.
+
+Main database entities include:
+
+| Table              | Purpose                                                    |
+| ------------------ | ---------------------------------------------------------- |
+| `users`            | Job seeker profiles and authentication-related information |
+| `companies`        | Company information and verification                       |
+| `jobspider_admin`  | Administrator accounts                                     |
+| `category`         | Job categories                                             |
+| `subcategory`      | Job subcategories                                          |
+| `requiredskills`   | Job skills                                                 |
+| `company_jobs`     | Job postings                                               |
+| `job_applications` | Candidate applications                                     |
+| `saved_jobs`       | Bookmarked jobs                                            |
+
+## Important Relationships
+
+```text
+users
+ │
+ ├──────────────► job_applications
+ │
+ └──────────────► saved_jobs
+
+company_jobs
+ │
+ ├──────────────► job_applications
+ │
+ └──────────────► saved_jobs
+```
+
+Applications use:
+
+```text
+job_applications.userid
+        ↓
+users.userid
+```
+
+and:
+
+```text
+job_applications.jobid
+        ↓
+company_jobs.jobid
+```
+
+Saved jobs use the same user/job relationships.
+
+---
+
+# Environment Variables
+
+Never commit real secrets to Git.
+
+Create:
+
+```text
+.env
+```
+
+and configure the variables required by your environment.
+
+Example:
 
 ```env
 PORT=5000
 NODE_ENV=development
 
-# MySQL Database Configuration
+# MySQL
 DB_HOST=localhost
 DB_PORT=3306
 DB_USER=root
-DB_PASSWORD=your_mysql_password
-DB_NAME=defaultdb
+DB_PASSWORD=your_password
+DB_NAME=jobspider
 DB_SSL=false
 
 # Authentication
-JWT_SECRET=jobspider_super_secret_jwt_key_2026
-GOOGLE_CLIENT_ID=your_google_client_id.apps.googleusercontent.com
+JWT_SECRET=your_secure_random_secret
+
+# Google OAuth
+GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
 
-# Frontend URLs
+# Frontend / Backend URLs
 FRONTEND_URL=http://localhost:3000
 REACT_APP_SERVER_URL=http://localhost:5000
-REACT_APP_GOOGLE_CLIENT_ID=your_google_client_id.apps.googleusercontent.com
+
+# React Google Client ID
+REACT_APP_GOOGLE_CLIENT_ID=your_google_client_id
 ```
 
-### 4. Database Setup
-The backend automatically executes `schema.sql` on startup if tables do not exist, and creates the default super admin account if none exists.
-- Default Admin Credentials: `admin@jobspider.com` / `admin123`
+### Important
 
-### 5. Running the Application
+Do not use real credentials in:
+
+* README
+* GitHub repository
+* source code
+* screenshots
+* public configuration files
+
+Use `.env.example` for documentation only.
+
+---
+
+# Local Development
+
+## Prerequisites
+
+Install:
+
+* Node.js 18+
+* npm
+* MySQL 8+
+* Git
+
+---
+
+## 1. Clone the Repository
+
 ```bash
-# Start backend API (runs on http://localhost:5000)
+git clone <your-repository-url>
+cd Jobsspider
+```
+
+---
+
+## 2. Install Frontend Dependencies
+
+From the project root:
+
+```bash
+npm install
+```
+
+---
+
+## 3. Install Backend Dependencies
+
+```bash
+cd jobsspider_backend
+npm install
+cd ..
+```
+
+---
+
+## 4. Configure MySQL
+
+Create a MySQL database.
+
+Example:
+
+```sql
+CREATE DATABASE jobspider;
+```
+
+Configure the database credentials in:
+
+```text
+jobsspider_backend/.env
+```
+
+---
+
+## 5. Configure Environment Variables
+
+Create the required `.env` files using `.env.example` as a reference.
+
+Never commit the actual `.env` files.
+
+---
+
+## 6. Start Backend
+
+```bash
 cd jobsspider_backend
 npm start
+```
 
-# In a separate terminal, start frontend dev server (runs on http://localhost:3000)
+Backend:
+
+```text
+http://localhost:5000
+```
+
+---
+
+## 7. Start Frontend
+
+Open another terminal:
+
+```bash
+cd Jobsspider
 npm start
 ```
 
----
+Frontend:
 
-## Database Setup & Cloud MySQL (Aiven)
-
-### Schema & Initial Seeding
-The DDL script is located at `jobsspider_backend/schema.sql`. It defines:
-- `jobspider_admin`: Admin credentials table
-- `users`: User profiles and Google OAuth mapping
-- `companies`: Company registrations and verification status
-- `category`, `subcategory`, `requiredskills`: Job classification structure
-- `company_jobs`: Job posting details
-- `job_applications` & `saved_jobs`: User interactions
-
-### Cloud MySQL Setup (Aiven)
-1. Create a MySQL database service on [Aiven.io](https://aiven.io/).
-2. Copy the host, port (e.g., `12345`), username (`avroots`), password, and database name from Aiven Console.
-3. In your Render / Production Environment variables, set:
-   - `DB_HOST=<aiven-host>.aivencloud.com`
-   - `DB_PORT=<aiven-port>`
-   - `DB_USER=avroots`
-   - `DB_PASSWORD=<aiven-password>`
-   - `DB_NAME=defaultdb`
-   - `DB_SSL=true`
-4. The database pool will automatically enable SSL encryption (`rejectUnauthorized: false`) for remote cloud database connections.
-
----
-
-## Google Sign-In Setup
-
-1. Go to [Google Cloud Console](https://console.cloud.google.com/).
-2. Create a Project and navigate to **APIs & Services > Credentials**.
-3. Click **Create Credentials > OAuth client ID** (Application type: Web application).
-4. Configure Authorized JavaScript origins:
-   - `http://localhost:3000`
-   - `http://localhost:5000`
-   - `https://<your-render-app>.onrender.com`
-5. Configure Authorized redirect URIs:
-   - `http://localhost:3000`
-   - `https://<your-render-app>.onrender.com`
-6. Copy the Client ID and set `REACT_APP_GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_ID`.
-
----
-
-## Deployment Guide (Render)
-
-JobSpider is structured so that Express can serve the React static build, allowing full-stack deployment on a single Render Web Service.
-
-### Backend & Unified Web Service Settings on Render
-- **Environment**: Node
-- **Build Command**: `npm install && npm run build`
-- **Start Command**: `npm start`
-- **Environment Variables to add in Render Dashboard**:
-  - `PORT`: `10000` (or left to Render default)
-  - `NODE_ENV`: `production`
-  - `DB_HOST`: `<your-cloud-mysql-host>`
-  - `DB_PORT`: `<your-cloud-mysql-port>`
-  - `DB_USER`: `<your-cloud-mysql-user>`
-  - `DB_PASSWORD`: `<your-cloud-mysql-password>`
-  - `DB_NAME`: `defaultdb`
-  - `DB_SSL`: `true`
-  - `JWT_SECRET`: `<secure-random-string>`
-  - `GOOGLE_CLIENT_ID`: `<your-google-client-id>`
-  - `REACT_APP_GOOGLE_CLIENT_ID`: `<your-google-client-id>`
-
----
-
-## Audit & Fixes Log
-
-The following improvements and bug fixes were completed during the full technical audit:
-
-1. **Security & Authorization**:
-   - Implemented `verifyAdmin` middleware on administrative mutation endpoints in `category.js`, `subcategory.js`, `company.js`, `companyjobs.js`, and `requiredskills.js` to prevent unauthorized API requests.
-   - Enforced password hashing with `bcryptjs` on user and admin account creation.
-2. **Frontend Quality & UI/UX**:
-   - Removed intrusive debug `alert()` popups in authentication flows (e.g. `EmailVerify.js`).
-   - Fixed direct Redux state mutation in registration flow.
-   - Corrected branding references (replaced leftover "Indeed" text with "JobsSpider").
-   - Added user feedback using SweetAlert2 toast notifications across all user actions.
-3. **Google OAuth 2.0 Integration**:
-   - Integrated `@react-oauth/google` and verified token parsing on backend using `google-auth-library`.
-   - Created fallback mechanism to automatically register Google users upon initial sign-in.
-4. **Cloud Database & Deployment Readiness**:
-   - Enhanced `pool.js` with conditional SSL support for Aiven MySQL and other remote MySQL providers.
-   - Configured Express static build fallback to serve React single-page app routes smoothly in production.
-
----
-
-## Database Fixes
-
-### 1. Root Cause of Foreign-Key Error
-When starting JobSpider, database initialization threw the error:
-`Failed to add the foreign key constraint. Missing column 'userid' for constraint 'job_applications_ibfk_2' in the referenced table 'users'`
-
-- **Why it occurred**: The existing MySQL database contained a legacy `users` table created with composite primary key `(mobileno, emailaddress)` and a misformatted column `` ` username` `` (leading space and `armscii8` collation), with **no `userid` column**.
-- When `schema.sql` executed `CREATE TABLE IF NOT EXISTS job_applications`, MySQL attempted to construct the foreign key constraint `FOREIGN KEY (userid) REFERENCES users(userid) ON DELETE CASCADE`.
-- Because the referenced table `users` had no column named `userid`, MySQL rejected the constraint and failed to create `job_applications` and `saved_jobs`.
-
-### 2. Tables & Columns Involved
-| Table | Original State in DB | Expected / Fixed State | Purpose |
-| :--- | :--- | :--- | :--- |
-| `users` | PK `(mobileno, emailaddress)`, `` ` username` ``, `password VARCHAR(45)`, no `userid` | `userid INT AUTO_INCREMENT PRIMARY KEY`, `username VARCHAR(100)`, `password VARCHAR(255)`, `emailaddress VARCHAR(150) UNIQUE`, `mobileno VARCHAR(20) UNIQUE`, plus profile fields (`picture`, `google_id`, `resume_url`, `headline`, `skills`, `created_at`) | Matches application models and provides single numeric identifier for foreign keys |
-| `job_applications` | Not created | `applicationid INT AUTO_INCREMENT PRIMARY KEY`, `jobid INT NOT NULL` (FK -> `company_jobs.jobid`), `userid INT NOT NULL` (FK -> `users.userid`) | Stores candidate job applications with cascade deletion |
-| `saved_jobs` | Not created | `savedid INT AUTO_INCREMENT PRIMARY KEY`, `jobid INT NOT NULL` (FK -> `company_jobs.jobid`), `userid INT NOT NULL` (FK -> `users.userid`), `UNIQUE KEY (userid, jobid)` | Stores user bookmarked jobs with cascade deletion |
-| `companies` | `registrationnumber VARCHAR(45)`, `descripition VARCHAR(45)` | `registrationno VARCHAR(100)`, `description TEXT`, `password VARCHAR(255)` | Matches column names expected in `company.js` routes |
-| `jobspider_admin` | PK `(emailid, mobileno)`, no `adminid` | `adminid INT AUTO_INCREMENT UNIQUE`, `adminname VARCHAR(100)`, `password VARCHAR(255)` | Provides numeric `adminid` for JWT authentication token generation |
-
-### 3. What Was Changed
-1. **Users Schema Modernization (Non-Destructive)**:
-   - Added `userid INT AUTO_INCREMENT PRIMARY KEY` while preserving all existing user accounts.
-   - Renamed `` ` username` `` to clean `username VARCHAR(100)` with `utf8mb4` encoding.
-   - Expanded `password` to `VARCHAR(255)` to support standard 60-character bcrypt password hashes.
-   - Added `UNIQUE` constraints on `emailaddress` and `mobileno`.
-2. **Tables Created**:
-   - Created `job_applications` with `FOREIGN KEY (jobid) REFERENCES company_jobs(jobid) ON DELETE CASCADE` and `FOREIGN KEY (userid) REFERENCES users(userid) ON DELETE CASCADE`.
-   - Created `saved_jobs` with `FOREIGN KEY (jobid) REFERENCES company_jobs(jobid) ON DELETE CASCADE` and `FOREIGN KEY (userid) REFERENCES users(userid) ON DELETE CASCADE`.
-3. **Automated Non-Destructive Migrations in `pool.js`**:
-   - Added `runAutoMigrations()` inside `jobsspider_backend/routes/pool.js` that checks for legacy schemas before applying DDL statements, guaranteeing compatibility on both fresh and existing local/cloud MySQL instances.
-
-### 4. Why the New Relationship is Correct
-- **Data Integrity**: Using `users.userid (INT)` as the single primary key aligns with `job_applications.userid (INT)` and `saved_jobs.userid (INT)`, enabling standard indexed joins (`A.userid = U.userid`).
-- **Cascade Behavior**: Setting `ON DELETE CASCADE` ensures that when a user account is deleted, their associated applications and bookmarks are cleaned up automatically without leaving broken orphan records.
-- **ORM / JWT Token Standard**: Both authentication tokens and frontend payload representations use `{ userid: ... }`, which is consistent across all API endpoints.
-
-### 5. How to Initialize a Fresh Database
-For a clean database setup:
-1. Ensure MySQL is running and configured in `jobsspider_backend/.env`.
-2. Start the backend:
-   ```bash
-   cd jobsspider_backend
-   npm start
-   ```
-3. The server automatically creates the database (if local), creates all tables with proper foreign key constraints, and seeds default master data and the default super admin account.
-
-### 6. Manual Migration / SQL Commands (if required on existing DB)
-```sql
--- 1. Modernize Users Table
-ALTER TABLE users 
-  CHANGE COLUMN ` username` username VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  DROP PRIMARY KEY,
-  ADD COLUMN userid INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST,
-  ADD UNIQUE KEY unique_user_email (emailaddress),
-  ADD UNIQUE KEY unique_user_mobile (mobileno),
-  MODIFY COLUMN password VARCHAR(255) DEFAULT NULL;
-
--- 2. Modernize Companies & Admin Tables
-ALTER TABLE companies 
-  ADD COLUMN IF NOT EXISTS registrationno VARCHAR(100) DEFAULT NULL,
-  ADD COLUMN IF NOT EXISTS description TEXT DEFAULT NULL,
-  MODIFY COLUMN password VARCHAR(255) DEFAULT NULL;
-
-ALTER TABLE jobspider_admin 
-  ADD COLUMN IF NOT EXISTS adminid INT NOT NULL AUTO_INCREMENT UNIQUE FIRST,
-  ADD COLUMN IF NOT EXISTS adminname VARCHAR(100) DEFAULT 'Admin',
-  MODIFY COLUMN password VARCHAR(255) DEFAULT NULL;
-
--- 3. Create Applications & Saved Jobs Tables
-CREATE TABLE IF NOT EXISTS job_applications (
-  applicationid INT AUTO_INCREMENT PRIMARY KEY,
-  jobid INT NOT NULL,
-  userid INT NOT NULL,
-  user_email VARCHAR(150),
-  user_phone VARCHAR(20),
-  resume_url VARCHAR(255),
-  status VARCHAR(50) DEFAULT 'Applied',
-  applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT fk_job_app_jobid FOREIGN KEY (jobid) REFERENCES company_jobs(jobid) ON DELETE CASCADE,
-  CONSTRAINT fk_job_app_userid FOREIGN KEY (userid) REFERENCES users(userid) ON DELETE CASCADE
-);
-
-CREATE TABLE IF NOT EXISTS saved_jobs (
-  savedid INT AUTO_INCREMENT PRIMARY KEY,
-  jobid INT NOT NULL,
-  userid INT NOT NULL,
-  saved_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  UNIQUE KEY unique_user_job (userid, jobid),
-  CONSTRAINT fk_saved_job_jobid FOREIGN KEY (jobid) REFERENCES company_jobs(jobid) ON DELETE CASCADE,
-  CONSTRAINT fk_saved_job_userid FOREIGN KEY (userid) REFERENCES users(userid) ON DELETE CASCADE
-);
+```text
+http://localhost:3000
 ```
+
+---
+
+# Google Sign-In Setup
+
+JobSpider supports Google OAuth 2.0 authentication.
+
+## Step 1 — Google Cloud Console
+
+Open Google Cloud Console and create/select a project.
+
+Navigate to:
+
+```text
+APIs & Services
+        ↓
+Credentials
+        ↓
+Create Credentials
+        ↓
+OAuth Client ID
+```
+
+Choose:
+
+```text
+Web Application
+```
+
+## Step 2 — Authorized JavaScript Origins
+
+Add your development and production frontend URLs.
+
+Example:
+
+```text
+http://localhost:3000
+https://your-render-app.onrender.com
+```
+
+Use your actual deployed URL in production.
+
+## Step 3 — OAuth Credentials
+
+Configure the Google Client ID and Client Secret through environment variables.
+
+```env
+GOOGLE_CLIENT_ID=...
+GOOGLE_CLIENT_SECRET=...
+REACT_APP_GOOGLE_CLIENT_ID=...
+```
+
+Never hardcode these values.
+
+## Step 4 — Production
+
+After deploying to Render, update the Google OAuth configuration with the actual production domain/URLs required by the authentication flow.
+
+---
+
+# Cloud MySQL Setup
+
+A local MySQL server cannot be accessed by a backend running on Render through `localhost`.
+
+For production, use a cloud-accessible MySQL service.
+
+Aiven MySQL can be used for this purpose.
+
+## Aiven Configuration
+
+Create a MySQL service and obtain:
+
+* Host
+* Port
+* Username
+* Password
+* Database name
+* SSL requirements
+
+Configure them in Render environment variables.
+
+Example:
+
+```env
+DB_HOST=your-aiven-host
+DB_PORT=your-aiven-port
+DB_USER=your-aiven-user
+DB_PASSWORD=your-aiven-password
+DB_NAME=your-database-name
+DB_SSL=true
+```
+
+The actual values must come from your Aiven service.
+
+---
+
+# Production Deployment
+
+JobSpider is designed to support a unified Render deployment where Express serves the React production build.
+
+## Render Service
+
+Create a new:
+
+```text
+Web Service
+```
+
+Connect your GitHub repository.
+
+## Environment
+
+```text
+Node
+```
+
+## Build Command
+
+```bash
+npm install && npm run build
+```
+
+## Start Command
+
+```bash
+npm start
+```
+
+Use the project's actual npm scripts if they differ.
+
+---
+
+# Render Environment Variables
+
+Configure the required production variables in:
+
+```text
+Render Dashboard
+    ↓
+Service
+    ↓
+Environment
+```
+
+Example:
+
+```env
+NODE_ENV=production
+
+DB_HOST=your-cloud-mysql-host
+DB_PORT=your-cloud-mysql-port
+DB_USER=your-cloud-mysql-user
+DB_PASSWORD=your-cloud-mysql-password
+DB_NAME=your-cloud-mysql-database
+DB_SSL=true
+
+JWT_SECRET=your-production-secret
+
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+REACT_APP_GOOGLE_CLIENT_ID=your-google-client-id
+```
+
+Do not copy development credentials into production.
+
+---
+
+# Database Initialization
+
+The backend contains database initialization/migration logic.
+
+The schema is defined in:
+
+```text
+jobsspider_backend/schema.sql
+```
+
+Database-related logic is handled through:
+
+```text
+jobsspider_backend/pool.js
+```
+
+The application should be tested against both:
+
+* Fresh database
+* Existing database
+
+before production deployment.
+
+---
+
+# API Overview
+
+The backend exposes REST APIs for major application functionality.
+
+Typical API modules include:
+
+```text
+Authentication
+Users
+Jobs
+Companies
+Applications
+Saved Jobs
+Categories
+Subcategories
+Required Skills
+Administration
+```
+
+API requests generally follow:
+
+```text
+Frontend
+   ↓
+Axios
+   ↓
+Express Route
+   ↓
+Authentication Middleware
+   ↓
+Authorization Middleware
+   ↓
+Database
+   ↓
+JSON Response
+   ↓
+React UI
+```
+
+Always verify the actual routes in:
+
+```text
+jobsspider_backend/routes/
+```
+
+before adding or modifying API documentation.
+
+---
+
+# Security
+
+The application includes several security mechanisms.
+
+## Password Hashing
+
+Passwords are hashed using bcrypt.
+
+## JWT Authentication
+
+Protected APIs validate authentication tokens before processing requests.
+
+## Admin Authorization
+
+Administrative mutation endpoints are protected by authorization middleware.
+
+## Environment Secrets
+
+Sensitive credentials are stored using environment variables rather than source code.
+
+## Database Security
+
+Production databases should use:
+
+* Strong passwords
+* SSL/TLS where supported
+* Restricted credentials
+* Connection pooling
+* Proper database permissions
+
+## Input Validation
+
+All user-controlled data should be validated before being processed or stored.
+
+---
+
+# Database Migration & Fixes
+
+During development, an existing legacy database schema caused a foreign-key initialization error:
+
+```text
+Failed to add the foreign key constraint.
+Missing column 'userid' for constraint
+'job_applications_ibfk_2' in the referenced table 'users'
+```
+
+## Root Cause
+
+The existing `users` table did not contain the `userid` column required by the application relationship.
+
+The legacy schema used a composite primary key involving:
+
+```text
+mobileno
+emailaddress
+```
+
+while the application expected a numeric user identifier.
+
+## Updated Data Model
+
+The application now expects:
+
+```text
+users
+ └── userid INT PRIMARY KEY AUTO_INCREMENT
+```
+
+and:
+
+```text
+job_applications.userid
+        ↓
+users.userid
+```
+
+Similarly:
+
+```text
+saved_jobs.userid
+        ↓
+users.userid
+```
+
+## Applications Table
+
+The expected structure includes:
+
+```text
+applicationid
+jobid
+userid
+user_email
+user_phone
+resume_url
+status
+applied_at
+```
+
+## Saved Jobs Table
+
+The expected structure includes:
+
+```text
+savedid
+jobid
+userid
+saved_at
+```
+
+A unique constraint prevents the same user from saving the same job multiple times.
+
+```text
+UNIQUE(userid, jobid)
+```
+
+## Cascade Behavior
+
+Foreign keys use cascade behavior where appropriate so that dependent application/bookmark records do not remain orphaned when a related record is removed.
+
+---
+
+# Troubleshooting
+
+## MySQL Connection Error
+
+Check:
+
+```text
+DB_HOST
+DB_PORT
+DB_USER
+DB_PASSWORD
+DB_NAME
+DB_SSL
+```
+
+For local MySQL:
+
+```env
+DB_HOST=localhost
+DB_PORT=3306
+DB_SSL=false
+```
+
+For cloud MySQL:
+
+```env
+DB_HOST=your-cloud-host
+DB_PORT=your-cloud-port
+DB_SSL=true
+```
+
+---
+
+## Foreign Key Error
+
+If you see:
+
+```text
+Missing column 'userid'
+```
+
+check:
+
+```sql
+DESCRIBE users;
+DESCRIBE job_applications;
+```
+
+Then verify:
+
+```text
+job_applications.userid
+        ↓
+users.userid
+```
+
+The two columns must have compatible data types.
+
+Do not randomly add columns or drop tables without checking existing data and application code.
+
+---
+
+## CORS Error
+
+Verify that the backend allows the correct frontend URL.
+
+Development:
+
+```text
+http://localhost:3000
+```
+
+Production:
+
+```text
+https://your-production-domain
+```
+
+Do not use `*` for sensitive authenticated production APIs unless there is a specific reason and the security implications are understood.
+
+---
+
+## Google Login Not Working
+
+Check:
+
+1. Google Client ID
+2. Google Client Secret
+3. Authorized JavaScript origins
+4. Authorized redirect URIs, where applicable
+5. Frontend environment variables
+6. Backend environment variables
+7. Production domain
+8. Google OAuth configuration
+
+Also restart the application after changing environment variables.
+
+---
+
+## Render Deployment Fails
+
+Check:
+
+```text
+Build Command
+Start Command
+Node Version
+Environment Variables
+Database Connection
+CORS
+Production API URL
+Google OAuth URLs
+```
+
+Check Render logs for the first actual application error rather than only the final deployment message.
+
+---
+
+# Development Guidelines
+
+When modifying JobSpider:
+
+### 1. Understand Before Changing
+
+Read the existing implementation before changing functionality.
+
+### 2. Avoid Hardcoding
+
+Do not hardcode:
+
+* Database credentials
+* JWT secrets
+* Google credentials
+* Production URLs
+
+### 3. Preserve Existing Data
+
+Database migrations should be designed carefully for existing installations.
+
+### 4. Validate API Input
+
+Never trust client-side validation alone.
+
+### 5. Handle Errors Properly
+
+Return meaningful HTTP status codes and safe error messages.
+
+### 6. Keep Frontend and Backend Contracts Consistent
+
+When changing an API response or request format, update all dependent frontend services/components.
+
+### 7. Test Before Deployment
+
+Verify:
+
+```text
+Frontend
+Backend
+Database
+Authentication
+Authorization
+Major User Flows
+Production Build
+```
+
+---
+
+# Production Checklist
+
+Before deploying JobSpider, verify:
+
+* [ ] Frontend production build succeeds
+* [ ] Backend starts successfully
+* [ ] MySQL cloud database is reachable
+* [ ] Database schema is initialized correctly
+* [ ] Foreign keys work
+* [ ] User registration works
+* [ ] Login works
+* [ ] Google Sign-In works
+* [ ] JWT authentication works
+* [ ] Admin authorization works
+* [ ] Job listing works
+* [ ] Job search works
+* [ ] Job filtering works
+* [ ] Job details work
+* [ ] Job application works
+* [ ] Saved jobs work
+* [ ] Application history works
+* [ ] Company management works
+* [ ] Admin dashboard works
+* [ ] CORS is correctly configured
+* [ ] Production environment variables are configured
+* [ ] `.env` is not committed
+* [ ] No secrets are present in source code
+* [ ] Render build succeeds
+* [ ] Render service starts successfully
+* [ ] Production API works
+* [ ] Production frontend works
+* [ ] README is updated
+
+---
+
+# Future Improvements
+
+Potential improvements for future versions include:
+
+* Real-time application notifications
+* Email notifications
+* Advanced candidate search
+* Resume parsing
+* AI-based job recommendations
+* AI-powered resume analysis
+* Job recommendation engine
+* Company analytics
+* Recruiter dashboard
+* Advanced reporting
+* Application status notifications
+* Rate limiting
+* Redis caching
+* Background job processing
+* Automated testing
+* CI/CD pipeline
+* API documentation using Swagger/OpenAPI
+* Monitoring and logging
+* Improved search using Elasticsearch/OpenSearch
+
+---
+
+# Project Status
+
+JobSpider is designed as a full-stack production-oriented job portal with:
+
+* React frontend
+* Node.js/Express backend
+* MySQL database
+* JWT authentication
+* Google OAuth 2.0
+* Role-based authorization
+* Job search and filtering
+* Job applications
+* Saved jobs
+* Company management
+* Admin dashboard
+* Cloud MySQL compatibility
+* Render deployment support
+
+Before production release, all authentication, database migrations, API flows, environment configuration, and deployment settings should be tested against the actual production environment.
+
+---
+
+# License
+
+Add your project's license here.
+
+Example:
+
+```text
+MIT License
+```
+
+if the project is intended to be released under the MIT License.
