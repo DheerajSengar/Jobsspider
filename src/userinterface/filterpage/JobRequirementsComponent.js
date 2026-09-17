@@ -25,7 +25,7 @@ return(
                     <div style={{ display: 'flex', flexDirection:matches?'column':'row' }}>
                         <div style={{ display: 'flex', flexDirection: 'column' }} >
                             <div style={{ display: 'flex', flexDirection: 'row', padding: 10, gap: 5 }}>
-                                <img src="experience.png" style={{ width: 20, height: 20 }} />
+                                <img src="experience.png" style={{ width: 20, height: 20 }} alt="Experience Icon" />
                                 <div style={{display:'flex',flexDirection:'column'}}> 
                                 <div style={{fontSize:16,color:'rgb(127, 124, 124)'}}>
                                 Experience </div>
@@ -34,7 +34,7 @@ return(
                             </div>
 
                             <div style={{ display: 'flex', flexDirection: 'row', padding: 10, gap: 5 }}>
-                                <img src="education.png" style={{ width: 20, height: 20 }} />
+                                <img src="education.png" style={{ width: 20, height: 20 }} alt="Education Icon" />
                                 <div style={{display:'flex',flexDirection:'column'}}> 
                                 <div style={{fontSize:16,color:'rgb(127, 124, 124)'}}>Education </div>
                                  <div style={{fontSize:16,}}>  Graduate</div>
@@ -44,7 +44,7 @@ return(
                         <div style={{ display: 'flex', flexDirection: 'row', padding:matches?0:10, gap: 5, marginLeft:matches?0:210 }}>
                         <div style={{ display: 'flex', flexDirection: 'column' }} >
                             <div style={{ display: 'flex', flexDirection: 'row', padding: 10, gap: 5 }}>
-                                <img src="englishlevel.png" style={{ width: 20, height: 20 }} />
+                                <img src="englishlevel.png" style={{ width: 20, height: 20 }} alt="English level Icon" />
                                 <div style={{display:'flex',flexDirection:'column'}}> 
                                 <div style={{fontSize:16,color:'rgb(127, 124, 124)'}}>English level </div>
                                  <div style={{fontSize:16,}}>Good (Intermediate / Advanced) English</div>
@@ -52,7 +52,7 @@ return(
                             </div>
 
                             <div style={{ display: 'flex', flexDirection: 'row', padding: 10, gap: 5 }}>
-                                <img src="gender.png" style={{ width:15, height:15,color:'rgb(156, 150, 150)' }} />
+                                <img src="gender.png" style={{ width:15, height:15,color:'rgb(156, 150, 150)' }} alt="Gender Icon" />
                                 <div style={{display:'flex',flexDirection:'column'}}> 
                                 <div style={{fontSize:16,color:'rgb(127, 124, 124)'}}>Gender </div>
                                  <div style={{fontSize:16,}}>Any Gender</div>

@@ -4,7 +4,7 @@ export default function GetResumeHelp()
    return(
     <div style={{backgroundColor:'#f3f4ff',width:'100%',height:350 ,marginTop:100 ,display:'flex',justifyContent:'center'}}>
     <div style={{marginLeft:5}}>
-     <img src='/girls.png' style={{height:330 ,marginTop:18}}/>
+     <img src='/girls.png' style={{height:330 ,marginTop:18}} alt="Resume Help Female Illustration" />
     </div>
     <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 60}}>
 <div style={{fontSize: 30, fontWeight: 'bolder', display: 'flex', justifyContent: 'center'}}>
@@ -22,11 +22,11 @@ resume review
 <div style={{fontSize:14, marginTop:14}}>
 A service of 
 </div>
-<img src='/Indeedlogo.png' style={{height:30,marginTop:10,marginLeft:5 }}/>
+<img src='/Indeedlogo.png' style={{height:30,marginTop:10,marginLeft:5 }} alt="Indeed Logo" />
 </div> 
 </div>
  <div style={{marginLeft:5,}}>
-      <img src='/boy.png' style={{height:350}}/>
+      <img src='/boy.png' style={{height:350}} alt="Resume Help Male Illustration" />
  </div>
  </div> 
 ) 

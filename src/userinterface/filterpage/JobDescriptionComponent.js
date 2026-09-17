@@ -1,13 +1,11 @@
 import { Paper, Accordion } from "@mui/material";
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { useState } from "react";
 import parse from 'html-react-parser';
 
 export default function JobDescription({ data }) {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down('sm'));
-  const [showAll, setShowAll] = useState(false);
 
   const boxList = (data) => {
     return data.map((item, index) => (

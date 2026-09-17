@@ -1,6 +1,6 @@
-import { Button, Divider, Paper } from "@mui/material";
+import { Divider, Paper } from "@mui/material";
 import { serverURL } from "../../services/FetchNodeServices";
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import StarIcon from "@mui/icons-material/Star";
 import DownloadForOfflineOutlinedIcon from "@mui/icons-material/DownloadForOfflineOutlined";
 import { useTheme } from "@mui/material/styles";
@@ -123,6 +123,7 @@ export default function DownloadJobsSpider() {
                 <img
                   src={`${serverURL}/images/fullstack.png`}
                   style={{ width: "100%", borderRadius: 10 }}
+                  alt="QR Code"
                 />
               </div>
             </div>
@@ -150,7 +151,7 @@ export default function DownloadJobsSpider() {
               alignItems: "start",
             }}
           >
-            <img src={`${serverURL}/images/apna-app.png`} />
+            <img src={`${serverURL}/images/apna-app.png`} alt="JobsSpider App Preview" />
           </div>
         )}
 
@@ -316,11 +317,12 @@ export default function DownloadJobsSpider() {
               <img
                 src={`${serverURL}/images/playstore.webp`}
                 width={"30%"}
+                alt="Play Store"
               />
             </div>
           </div>
           <div style={{ position: "absolute", top: 170, right: 0 }}>
-            <img src={`${serverURL}/images/downloadmobile.png`} />
+            <img src={`${serverURL}/images/downloadmobile.png`} alt="Mobile Download Preview" />
           </div>
         </div>
       ) : (

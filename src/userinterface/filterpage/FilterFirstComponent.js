@@ -16,8 +16,6 @@ import FormLabel from '@mui/material/FormLabel';
 
 export default function FirstFilterComponent({exp,setExp,time,setTime}) {
   
-    const theme = useTheme();
-    const matches = useMediaQuery(theme.breakpoints.down('sm'));
     const [value, setValue] = useState(time);
     const handleDateChange = (event) => {
       setValue(event.target.value);
@@ -26,7 +24,7 @@ export default function FirstFilterComponent({exp,setExp,time,setTime}) {
 
    useEffect(function(){
     setExp(exp)
-   },[exp]) 
+   },[exp, setExp]) 
    const handleChange=(e)=>
    { 
     setExp(e.target.value)

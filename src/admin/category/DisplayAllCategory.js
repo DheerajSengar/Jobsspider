@@ -13,7 +13,6 @@ import { useNavigate } from "react-router";
 import {
   Button,
   Dialog,
-  DialogTitle,
   DialogContent,
   DialogActions,
 } from "@mui/material";
@@ -72,7 +71,7 @@ export default function DisplayAllCategory() {
 
   const validateData = () => {
     var error = false;
-    if (categoryName.length == 0) {
+    if (categoryName.length === 0) {
       handleError("categoryname", "Categoryname should not be blank...");
       error = true;
     }
@@ -108,7 +107,7 @@ export default function DisplayAllCategory() {
 
   const handleCategoryEdit = async () => {
     var error = validateData();
-    if (error == false) {
+    if (error === false) {
       var body = { categoryid: categoryId, categoryname: categoryName };
 
       var response = await postData("category/edit_category_data", body);
@@ -188,7 +187,7 @@ export default function DisplayAllCategory() {
               flexDirection: "column",
             }}
           >
-            <img src={icon.filename} style={{ width: "20%" }} />
+            <img src={icon.filename} style={{ width: "20%" }} alt="Category Icon" />
             <div className={classes.helperTextStyle}>{formError.filename}</div>
           </Grid>
 
@@ -255,6 +254,7 @@ export default function DisplayAllCategory() {
               <img
                 src={`${serverURL}/images/${rowData.categorypicture}`}
                 width={40}
+                alt={rowData.categoryname || "Category Icon"}
               />
             ),
           },

@@ -16,7 +16,6 @@ import subcategory from "../../assets/subcategory.png";
 import skill from "../../assets/skill.png";
 import verification from "../../assets/verification.png";
 import shutdown from "../../assets/shutdown.png";
-import reports from "../../assets/reports.png";
 import companies from "../../assets/company.png";
 import dashboard from "../../assets/dashboard.png";
 import Category from "../category/Category";

@@ -43,18 +43,18 @@ export default function SubCategory()
     const validateData=()=>{
      var error=false
       
-     if(categoryId.length==0)
+     if(categoryId.length===0)
         {
            handleError('categoryId',"CategoryId should not be blank...")
             error=true 
        }
 
-     if(subcategoryName.length==0)
+     if(subcategoryName.length===0)
      {
         handleError('subcategoryname',"SubCategoryname should not be blank...")
          error=true 
     }
-    if(icon.byte.length==0)
+    if(icon.byte.length===0)
       {
          handleError('filename',"please choose icon for subcategory...")
           error=true 
@@ -64,7 +64,7 @@ export default function SubCategory()
     }
     const handleClick=async()=>{
        var error=validateData()
-     if(error==false)
+     if(error===false)
         {   
 
      var formData=new  FormData()   
@@ -131,7 +131,7 @@ clearData()
 
             <Grid size={12} style={{display:'flex',justifyContent:'center',alignItems:'center',flexDirection:'column'}}>
                
-                <img src={icon.filename} style={{width:'20%'}}/>
+                <img src={icon.filename} style={{width:'20%'}} alt="Subcategory Icon" />
                 <div  className={classes.helperTextStyle}>
                   {formError.filename}
                 </div>

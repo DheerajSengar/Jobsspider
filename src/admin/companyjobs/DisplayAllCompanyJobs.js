@@ -1,25 +1,17 @@
-import Radio from '@mui/material/Radio';
 import TitleComponent from '../components/TitleComponent';
 import { useStyles } from "./CompanyJobsCss"
 import { Button, Divider, FormHelperText, TextField } from "@mui/material";
-// import TitleComponent from "../src/admin/components/TitleComponent"
 import Grid from "@mui/material/Grid2";
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { useState, useEffect } from 'react'
-import { getData, postData, passwordgenerator } from "../../services/FetchNodeServices";
+import { getData, postData } from "../../services/FetchNodeServices";
 import Swal from 'sweetalert2'
 import { Select, InputLabel, FormControl, MenuItem } from "@mui/material";
-import { FormLabel, RadioGroup, FormControlLabel } from '@mui/material';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { CenterFocusStrong, Message } from '@mui/icons-material';
 import * as React from 'react';
 import Checkbox from '@mui/material/Checkbox';
-// import { label } from '@mui/icons-material';
-import { title } from '@mui/icons-material';
 import MaterialTable from "@material-table/core";
-import { serverURL } from "../../services/FetchNodeServices";
-import { Dialog, DialogTitle, DialogContent, DialogActions, } from "@mui/material";
+import { Dialog, DialogContent, DialogActions, } from "@mui/material";
 
 
 
@@ -253,7 +245,7 @@ export default function DisplayAllCompanyJobs() {
     }
     const handleCompanyJobsEdit = async () => {
         var error = validateData();
-        if (error == false) {
+        if (error === false) {
             var body = {
                 companyid: companyId, categoryid: categoryId, subcategoryid: subCategoryId,
                 skills: JSON.stringify(skills), educationqualification: JSON.stringify(educationQualification), experience: experience,
@@ -286,82 +278,82 @@ export default function DisplayAllCompanyJobs() {
 
     const validateData = () => {
         var error = false
-        if (companyId.length == 0) {
+        if (companyId.length === 0) {
             handleError('companyid', "companyid should not be blank")
             error = true
         }
 
 
-        if (categoryId.length == 0) {
+        if (categoryId.length === 0) {
             handleError('categoryid', "category should not be blank")
             error = true
         }
 
-        if (subCategoryId.length == 0) {
+        if (subCategoryId.length === 0) {
             handleError('subCategoryid', "subCategory should not be blank")
             error = true
         }
-        if (skills.length == 0) {
+        if (skills.length === 0) {
             handleError('skills', "skills should not be blank")
             error = true
         }
-        if (educationQualification.length == 0) {
+        if (educationQualification.length === 0) {
             handleError('educationqualification', "educationqualification should not be blank")
             error = true
         }
-        if (experience.length == 0) {
+        if (experience.length === 0) {
             handleError('experience', "experience should not be blank")
             error = true
         }
-        if (jobDeatails.length == 0) {
+        if (jobDeatails.length === 0) {
             handleError('jobdetails', "jobdetails should not be blank")
             error = true
         }
-        if (jobType.length == 0) {
+        if (jobType.length === 0) {
             handleError('jobtype', "jobtype should not be blank")
             error = true
         }
-        if (minSalary.length == 0) {
+        if (minSalary.length === 0) {
             handleError('minsalary', "minsalary should not be blank")
             error = true
         }
-        if (maxSalary.length == 0) {
+        if (maxSalary.length === 0) {
             handleError('maxsalary', "maxsalary should not be blank")
             error = true
         }
-        if (schedule.length == 0) {
+        if (schedule.length === 0) {
             handleError('schedule', "schedule should not be blank")
             error = true
         }
-        if (benifits.length == 0) {
+        if (benifits.length === 0) {
             handleError('benifits', "benifits should not be blank")
             error = true
         }
-        if (workLocationCity.length == 0) {
+        if (workLocationCity.length === 0) {
             handleError('worklocationcity', "worklocationcity should not be blank")
             error = true
         }
-        if (postDate.length == 0) {
+        if (postDate.length === 0) {
             handleError('postdate', "postdate should not be blank")
             error = true
         }
-        if (applicationDeadline.length == 0) {
+        if (applicationDeadline.length === 0) {
             handleError('applicationdedline', "applicationdedline should not be blank")
             error = true
         }
-        if (postDate.length == 0) {
+        if (postDate.length === 0) {
             handleError('postdate', "postdate should not be blank")
             error = true
         }
-        if (contactPerson.length == 0) {
+        if (contactPerson.length === 0) {
             handleError('contactperson', "contactperson should not be blank")
             error = true
         }
-        if (emailAddress.length == 0) {
+        if (emailAddress.length === 0) {
             handleError('emailaddress', "emailaddress should not be blank")
             error = true
         }
-        if (mobileNo.length == 0) {
+        if (mobileNo.length === 0) {
             handleError('mobileno', "mobileno should not be blank")
             error = true
         }
@@ -381,7 +373,7 @@ export default function DisplayAllCompanyJobs() {
                         <Divider style={{ width: '98%' }} />
                     </Grid>
                     <Grid size={4}>
-                        <TextField value={companyId} helperText={formError.companyid} error={formError.companyid} onFocus={() => ('companyid', '')} onChange={(e) => setCompanyId(e.target.value)} label="Company ID" fullWidth />
+                        <TextField value={companyId} helperText={formError.companyid} error={formError.companyid} onFocus={() => handleError('companyid', '')} onChange={(e) => setCompanyId(e.target.value)} label="Company ID" fullWidth />
                     </Grid>
 
 
@@ -540,10 +532,10 @@ export default function DisplayAllCompanyJobs() {
                         </FormControl>
                     </Grid>
                     <Grid size={4}>
-                        <TextField value={minSalary} helperText={formError.minsalary} error={formError.minsalary} onFocus={() => ('minsalary', '')} onChange={(e) => setMinSalary(e.target.value)} label="MinSalary" fullWidth />
+                        <TextField value={minSalary} helperText={formError.minsalary} error={formError.minsalary} onFocus={() => handleError('minsalary', '')} onChange={(e) => setMinSalary(e.target.value)} label="MinSalary" fullWidth />
                     </Grid>
                     <Grid size={4}>
-                        <TextField value={maxSalary} helperText={formError.maxsalary} error={formError.maxsalary} onFocus={() => ('maxsalary', '')} onChange={(e) => setMaxSalary(e.target.value)} label="MaxSalary" fullWidth />
+                        <TextField value={maxSalary} helperText={formError.maxsalary} error={formError.maxsalary} onFocus={() => handleError('maxsalary', '')} onChange={(e) => setMaxSalary(e.target.value)} label="MaxSalary" fullWidth />
                     </Grid>
 
                     <Grid size={6}>
@@ -681,7 +673,7 @@ export default function DisplayAllCompanyJobs() {
                     <Grid size={4}>
                         <TextField
                             value={postDate}
-                            helperText={formError.postdate} error={formError.postdate} onFocus={() => ('postdate', '')} onChange={(e) => setPostDate(e.target.value)}
+                            helperText={formError.postdate} error={formError.postdate} onFocus={() => handleError('postdate', '')} onChange={(e) => setPostDate(e.target.value)}
                             label="post date"
                             type="date"
                             fullWidth
@@ -769,15 +761,15 @@ export default function DisplayAllCompanyJobs() {
                     </Grid>
 
                     <Grid size={4}>
-                        <TextField value={contactPerson} helperText={formError.contactperson} error={formError.contactperson} onFocus={() => ('contactperson', '')} onChange={(e) => setContactPerson(e.target.value)} label="Contact Person" fullWidth />
+                        <TextField value={contactPerson} helperText={formError.contactperson} error={formError.contactperson} onFocus={() => handleError('contactperson', '')} onChange={(e) => setContactPerson(e.target.value)} label="Contact Person" fullWidth />
                     </Grid>
 
                     <Grid size={4}>
-                        <TextField value={emailAddress} helperText={formError.emailaddress} error={formError.emailaddress} onFocus={() => ('emailaddress', '')} onChange={(e) => setEmailAddress(e.target.value)} label="Email Address" fullWidth />
+                        <TextField value={emailAddress} helperText={formError.emailaddress} error={formError.emailaddress} onFocus={() => handleError('emailaddress', '')} onChange={(e) => setEmailAddress(e.target.value)} label="Email Address" fullWidth />
                     </Grid>
 
                     <Grid size={4}>
-                        <TextField value={mobileNo} helperText={formError.mobileno} error={formError.mobileno} onFocus={() => ('mobileno', '')} onChange={(e) => setMobileNo(e.target.value)} label="Mobile No" fullWidth />
+                        <TextField value={mobileNo} helperText={formError.mobileno} error={formError.mobileno} onFocus={() => handleError('mobileno', '')} onChange={(e) => setMobileNo(e.target.value)} label="Mobile No" fullWidth />
                     </Grid>
                     <Grid size={6}>
 

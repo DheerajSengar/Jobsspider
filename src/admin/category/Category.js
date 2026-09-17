@@ -22,12 +22,12 @@ export default function Category() {
   };
   const validateData = () => {
     var error = false;
-    if (categoryName.length == 0) {
+    if (categoryName.length === 0) {
       handleError("categoryname", "Categoryname should not be blank...");
       error = true;
     }
 
-    if (icon.byte.length == 0) {
+    if (icon.byte.length === 0) {
       handleError("filename", "Please choose icon for category....");
       error = true;
     }
@@ -36,7 +36,7 @@ export default function Category() {
   };
   const handleClick = async () => {
     var error = validateData();
-    if (error == false) {
+    if (error === false) {
       var formData = new FormData();
       formData.append("categoryname", categoryName);
       formData.append("icon", icon.byte);
@@ -96,7 +96,7 @@ export default function Category() {
               flexDirection: "column",
             }}
           >
-            <img src={icon.filename} style={{ width: "20%" }} />
+            <img src={icon.filename} style={{ width: "20%" }} alt="Category Icon" />
             <div className={classes.helperTextStyle}>{formError.filename}</div>
           </Grid>
 

@@ -1,7 +1,5 @@
-import { TextField, Button, Divider } from "@mui/material";
-// import TitelComponents from "../components/TitelComponents";
 import { homeStyles } from "./HomeCss";
-import google from "../../assets/google.png"
+import google from "../../assets/google.png";
 
 export default function WelcomeBack() {
   const classes = homeStyles();
@@ -11,7 +9,7 @@ export default function WelcomeBack() {
 <div style={{display:"flex",justifyContent:"center"}}>
     <div style={{ display: 'flex', alignItems: 'center'}} >
               <div style={{ marginRight:5,marginTop:60 }}>
-                <img src='/spider.png' style={{ width: 40 }} />
+                <img src='/spider.png' style={{ width: 40 }} alt="JobsSpider Logo" />
               </div>
               <div style={{ fontWeight: 700, fontSize: 24,marginTop:60 }}  >
                 JobsSpider
@@ -34,7 +32,7 @@ export default function WelcomeBack() {
        
         <div variant="outlined"style={{height:40,display:'flex',alignItems:'center',flexDirection:'row',width: "100%",marginBottom: "12px",textTransform: "none",color: "black",fontWeight:700,backgroundColor: "#ffffff",border:'1px solid #dcdcdc',borderRadius:5}}>
           <div style={{}}>
-        <img src={google} style={{width:20,marginLeft:10 }}/>
+        <img src={google} style={{width:20,marginLeft:10 }} alt="Google Logo" />
         </div>
         <div style={{fontSize:17,marginLeft:120}}>
           Continue with Google

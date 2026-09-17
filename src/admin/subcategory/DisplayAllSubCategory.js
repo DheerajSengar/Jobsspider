@@ -12,7 +12,6 @@ import {Select,InputLabel,FormControl,MenuItem} from "@mui/material";
 import {
   Button,
   Dialog,
-  DialogTitle,
   DialogContent,
   DialogActions,
 } from "@mui/material";
@@ -86,15 +85,9 @@ export default function DisplayAllSubCategory() {
   const handleError=(label,message)=>{
     setFormError((prev)=>({...prev,[label]:message}))
 }
-const clearData=()=>{
-    setSubCategoryName("")
-    setCategoryId("")
-   
-    setIcon({byte:'',filename:'case.png'})
-}
 const validateData=()=>{
  var error=false
- if(subcategoryName.length==0)
+ if(subcategoryName.length===0)
  {
     handleError('subcategoryname',"subCategoryname should not be blank...")
      error=true 
@@ -145,7 +138,7 @@ fetchAllSubCategory()
 
 const handleSubCategoryEdit=async()=>{
   var error=validateData()
-if(error==false)
+if(error===false)
    {   
 
 var body={'subcategoryid':subCategoryId,'subcategoryname':subcategoryName}
@@ -237,7 +230,7 @@ return(
 
         <Grid size={12} style={{display:'flex',justifyContent:'center',alignItems:'center',flexDirection:'column'}}>
            
-            <img src={icon.filename} style={{width:'20%'}}/>
+            <img src={icon.filename} style={{width:'20%'}} alt="Subcategory Icon" />
             <div className={classes.helperTextStyle}>{formError.filename}</div>
         </Grid>
 
@@ -283,7 +276,7 @@ return(
           { title: "SubCategoryName", field: "subcategoryname" },
           {
             title: "Icon",render: (rowData) => (
-              <img src={`${serverURL}/images/${rowData.subcategorypicture}`}width={40}/>)},
+              <img src={`${serverURL}/images/${rowData.subcategorypicture}`} width={40} alt={rowData.subcategoryname || "Subcategory Icon"} />)},
         ]}
         data={subcategory} actions={[
           {

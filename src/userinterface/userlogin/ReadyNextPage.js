@@ -1,7 +1,4 @@
 import { TextField, Button, Divider, Box, Paper, Typography } from "@mui/material";
-import google from "../../assets/google.png";
-import apple from "../../assets/apple.png";
-import { homeStyles } from "./HomeCss";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { postData, generateOtp } from "../../services/FetchNodeServices";
@@ -11,7 +8,6 @@ import { GoogleLogin } from "@react-oauth/google";
 import Swal from "sweetalert2";
 
 export default function ReadyNextPage() {
-  const classes = homeStyles();
   const [emailMobile, setEmailMobile] = useState('');
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);

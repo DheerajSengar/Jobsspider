@@ -1,4 +1,3 @@
-import Radio from '@mui/material/Radio';
 import MaterialTable from "@material-table/core";
 import { Divider, TextField } from "@mui/material";
 import TitleComponent from "../components/TitleComponent";
@@ -8,12 +7,10 @@ import { useState, useEffect } from "react";
 import { useStyles } from "./CompanyCss";
 import { postData, getData, serverURL } from "../../services/FetchNodeServices";
 import Swal from "sweetalert2";
-import { Button, Dialog, DialogTitle, FormHelperText, DialogContent, DialogActions, } from "@mui/material";
-import { FormControl, FormLabel, RadioGroup, FormControlLabel } from '@mui/material';
+import { Button, Dialog, FormHelperText, DialogContent, DialogActions, } from "@mui/material";
 import { Select, InputLabel, MenuItem } from "@mui/material";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { Diversity1 } from '@mui/icons-material';
 import { useNavigate } from 'react-router';
 
 
@@ -457,7 +454,7 @@ export default function DisplayAllCompany() {
               flexDirection: "column",
             }}
           >
-            <img src={icon.filename} style={{ width: "20%" }} />
+            <img src={icon.filename} style={{ width: "20%" }} alt="Company Logo" />
             <div className={classes.helperTextStyle}>{formError.filename}</div>
           </Grid>
 
@@ -540,7 +537,7 @@ export default function DisplayAllCompany() {
         
           
           { title: "Verified/Not Verified", field: "verified" },
-          { title: "Icon", render: (rowData) => (<img src={`${serverURL}/images/${rowData.logo}`} width={40} />), },]}
+          { title: "Icon", render: (rowData) => (<img src={`${serverURL}/images/${rowData.logo}`} width={40} alt={rowData.companyname || "Company Logo"} />), },]}
         data={company}
         actions={[
           {

@@ -32,7 +32,6 @@ export default function ShowJobsCards() {
   const experience = keys.get("experience");
   const schedule = keys.get("schedule");
   const jobdetails = keys.get("jobdetails");
-  const skills = keys.get("skills");
   const qualification = keys.get("educationqualification");
   const benifits = keys.get("benifits");
   const worklocationcity = keys.get("worklocationcity");

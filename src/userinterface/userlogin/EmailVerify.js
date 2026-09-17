@@ -25,7 +25,7 @@ export default function EmailVerify() {
       if (location) {
         dispatch({ type: 'ADD_USER', payload: { ...location, ot } });
       }
-    }, []);
+    }, [dispatch, location]);
 
     const handleChange = (e) => {
       if (e.target.value.length === 6) {
@@ -45,7 +45,7 @@ export default function EmailVerify() {
       <div style={{display:"flex",justifyContent:"center"}}>
     <div style={{ display: 'flex', alignItems: 'center'}} >
               <div style={{ marginRight:5,marginTop:100 }}>
-                <img src='/spider.png' style={{ width: 40 }} />
+                <img src='/spider.png' style={{ width: 40 }} alt="JobsSpider Logo" />
               </div>
               <div style={{ fontWeight: 700, fontSize: 24,marginTop:100 }}  >
                 JobsSpider
@@ -59,7 +59,7 @@ export default function EmailVerify() {
     <div  className={classes.box} style={{height:420,marginTop:10,backgroundColor:"white",border:'0.09rem #dfe6e9 solid'}} >
         <div style={{backgroundColor:"#74b9ff"}}>
         <div style={{display:'flex',alignItems:'center',justifyContent:'center'}}>
-        <img src={mobile} style={{width:120, height:80, marginBottom: "8px",marginTop:20}}/>
+        <img src={mobile} style={{width:120, height:80, marginBottom: "8px",marginTop:20}} alt="Mobile Verification" />
        
         </div>
         </div>
@@ -68,7 +68,7 @@ export default function EmailVerify() {
           Enter the code
         </div>
         <div style={{ fontWeight: "lighter",fontFamily: "Ubuntu", fontSize: "16PX", marginBottom: "16px", color: "gray" }}>
-        Enter the verification code sent to you on Email {location?.status=="Mobile"?<b>{location?.emailaddress}</b>:<b>{location?.emailMobile}</b>}
+        Enter the verification code sent to you on Email {location?.status === "Mobile" ? <b>{location?.emailaddress}</b> : <b>{location?.emailMobile}</b>}
         </div>
       <Grid size={12} >
         <div style={{marginBottom:5}}>

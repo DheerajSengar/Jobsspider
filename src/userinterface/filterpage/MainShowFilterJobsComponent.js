@@ -28,27 +28,26 @@ export default function ShowFilterJobsComponent() {
   const [exp, setExp] = useState(expr);
   const [time, setTime] = useState("-1");
 
-  const fetchJobs = async () => {
-    try {
-      const res = await postData('userinterface/main_search_jobs', { 
-        skills: skill, 
-        skillid: skill_id, 
-        categoryid, 
-        subcategoryid, 
-        expr: exp, 
-        time 
-      });
-      setJobsList(res.data || []);
-    } catch (error) {
-      console.error('Error fetching jobs:', error);
-      setJobsList([]);
-    }
-  };
-
   useEffect(() => {
     setJobsList([]);
-    fetchJobs();
-  }, [refresh, exp, time]);
+    const getJobs = async () => {
+      try {
+        const res = await postData('userinterface/main_search_jobs', { 
+          skills: skill, 
+          skillid: skill_id, 
+          categoryid, 
+          subcategoryid, 
+          expr: exp, 
+          time 
+        });
+        setJobsList(res.data || []);
+      } catch (error) {
+        console.error('Error fetching jobs:', error);
+        setJobsList([]);
+      }
+    };
+    getJobs();
+  }, [refresh, exp, time, skill, skill_id, categoryid, subcategoryid]);
 
   return (
     <div

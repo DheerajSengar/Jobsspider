@@ -1,4 +1,4 @@
-import { TextField, Button, Divider } from "@mui/material";
+import { TextField, Button } from "@mui/material";
 import { homeStyles } from "./HomeCss";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -44,7 +44,7 @@ export default function Password() {
     <div style={{display:"flex",justifyContent:"center"}}>
     <div style={{ display: 'flex', alignItems: 'center'}} >
               <div style={{ marginRight:5,marginTop:100 }}>
-                <img src='/spider.png' style={{ width: 40 }} />
+                <img src='/spider.png' style={{ width: 40 }} alt="JobsSpider Logo" />
               </div>
               <div style={{ fontWeight: 700, fontSize: 24,marginTop:100 }}  >
                 JobsSpider

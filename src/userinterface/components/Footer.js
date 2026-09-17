@@ -41,7 +41,7 @@ export default function Footer() {
             }}
           >
             <div>
-              <img src={spider} style={{ width:matches?75: 90 }} />
+              <img src={spider} style={{ width:matches?75: 90 }} alt="JobsSpider Logo" />
             </div>
             {matches?
             <div><Divider variant="middle" color="gray" style={{ width:"3%",height:'80%',alignSelf:'center'}}/></div> :<></>}
@@ -164,6 +164,7 @@ export default function Footer() {
                 <img
                   src={`${serverURL}/images/en_badge_web_generic.png`}
                   width={"60%"}
+                  alt="Google Play Badge"
                 />
               </div>
             </div>
@@ -179,6 +180,7 @@ export default function Footer() {
             <img
               src={`${serverURL}/images/fullstack.png`}
               style={{ width: "80%", height: "60%" }}
+              alt="App QR Code"
             />
           </div>
         </div>

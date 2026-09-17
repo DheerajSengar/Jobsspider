@@ -2,8 +2,6 @@ import { Paper } from "@mui/material";
 
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import Category from "../../admin/category/Category";
-import DisplayAllCategory from "../../admin/category/DisplayAllCategory";
 
 export default function JobRole({data}){
    
@@ -27,7 +25,7 @@ return(
                     <div style={{ display: 'flex', flexDirection:matches?'column':'row' }}>
                         <div style={{ display: 'flex', flexDirection: 'column' }} >
                             <div style={{ display: 'flex', flexDirection: 'row', padding: 10, gap: 5 }}>
-                                <img src="department.png" style={{ width: 20, height: 20 }} />
+                                <img src="department.png" style={{ width: 20, height: 20 }} alt="Department Icon" />
                                <div style={{display:'flex',flexDirection:'column'}}> 
                                 <div style={{fontSize:16,color:'rgb(127, 124, 124)'}}>Department </div>
                                  <div style={{fontSize:16,}}>{data.categoryname}</div>
@@ -35,7 +33,7 @@ return(
                             </div>
 
                             <div style={{ display: 'flex', flexDirection: 'row', padding: 10, gap: 5 }}>
-                                <img src="subdepartment.png" style={{ width: 20, height: 20 }} />
+                                <img src="subdepartment.png" style={{ width: 20, height: 20 }} alt="Subdepartment Icon" />
                                 <div style={{display:'flex',flexDirection:'column'}}> 
                                 <div style={{fontSize:16,color:'rgb(127, 124, 124)'}}>
                                 Role / Category</div>
@@ -46,7 +44,7 @@ return(
                         <div style={{ display: 'flex', flexDirection: 'row', padding:matches?0:10, gap: 5, marginLeft:matches?0:150 }}>
                         <div style={{ display: 'flex', flexDirection: 'column' }} >
                             <div style={{ display: 'flex', flexDirection: 'row', padding: 10, gap: 5 }}>
-                                <img src="employmenttype.png" style={{ width: 20, height: 20 }} />
+                                <img src="employmenttype.png" style={{ width: 20, height: 20 }} alt="Employment type Icon" />
                                 <div style={{display:'flex',flexDirection:'column'}}> 
                                 <div style={{fontSize:16,color:'rgb(127, 124, 124)'}}>Employment type</div>
                                  <div style={{fontSize:16,}}>{data.jobtype}</div>
@@ -54,7 +52,7 @@ return(
                             </div>
 
                             <div style={{ display: 'flex', flexDirection: 'row', padding: 10, gap: 5 }}>
-                                <img src="shift.png" style={{ width: 20, height: 20 }} />
+                                <img src="shift.png" style={{ width: 20, height: 20 }} alt="Shift Icon" />
                                 <div style={{display:'flex',flexDirection:'column'}}> 
                                 <div style={{fontSize:16,color:'rgb(127, 124, 124)'}}>
                                 Shift </div>

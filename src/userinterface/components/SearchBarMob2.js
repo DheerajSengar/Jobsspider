@@ -7,21 +7,15 @@ import {
   Popper,
   InputAdornment,
   Divider,
-  Grid2,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import WorkOutlineOutlinedIcon from "@mui/icons-material/WorkOutlineOutlined";
 import RoomOutlinedIcon from "@mui/icons-material/RoomOutlined";
 import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
 import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
-import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import Header from './Header';
 
 export default function SearchBarMob2() {
-  
-  const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.down("sm"));
 
   const topSkill = [
     { Skillid: 1, Skill: 'MERN' },

@@ -4,14 +4,12 @@ import { homeStyles } from "./HomeCss";
 import  Grid  from '@mui/material/Grid2';
  import mobile from '../../assets/mobile.png'
 import { TextField } from '@mui/material';
-import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useSelector,useDispatch } from 'react-redux';
-import { useState,useEffect } from 'react';
+import { useEffect } from 'react';
 import { generateOtp } from '../../services/FetchNodeServices';
 export default function Mobileotp() {
     const classes = homeStyles();
-   // const location=useLocation()
     var navigate=useNavigate()
     const location=useSelector(state=>state.user)
  
@@ -27,15 +25,12 @@ export default function Mobileotp() {
             temp['ot']=ot
             setOtp(ot)
             dispatch({type:'ADD_USER',payload:temp})
-        
-        
-        
-            },[])
+            }, [dispatch, location])
         const handleCheckOtp=()=>{
       
-          if(location?.ot==otp && status=="Mobile")
+          if(String(location?.ot) === String(otp) && status === "Mobile")
           { navigate('/email')}
-          else if(location?.ot==otp && status=="Email")
+          else if(String(location?.ot) === String(otp) && status === "Email")
             { navigate('/password')}
             
           else
@@ -48,7 +43,7 @@ export default function Mobileotp() {
       <div style={{display:"flex",justifyContent:"center"}}>
     <div style={{ display: 'flex', alignItems: 'center'}} >
               <div style={{ marginRight:5,marginTop:100 }}>
-                <img src='/spider.png' style={{ width: 40 }} />
+                <img src='/spider.png' style={{ width: 40 }} alt="JobsSpider Logo" />
               </div>
               <div style={{ fontWeight: 700, fontSize: 24,marginTop:100 }}  >
                 JobsSpider
@@ -62,7 +57,7 @@ export default function Mobileotp() {
     <div  className={classes.box} style={{height:420,marginTop:10, backgroundColor: 'white', border:'0.09rem #dfe6e9 solid',borderRadius:10}}  >
         <div style={{backgroundColor:"#74b9ff"}}>
         <div style={{display:'flex',alignItems:'center',justifyContent:'center'}}>
-        <img src={mobile} style={{width:120, height:80, marginBottom: "8px",marginTop:20}}/>
+        <img src={mobile} style={{width:120, height:80, marginBottom: "8px",marginTop:20}} alt="Mobile verification" />
        
         </div>
         </div>
@@ -71,7 +66,7 @@ export default function Mobileotp() {
           Enter the code
         </div>
         <div style={{ fontWeight: "lighter",fontFamily: "Ubuntu", fontSize: "16PX", marginBottom: "16px", color: "gray" }}>
-        Enter the verification code sent to you on {location?.status=="Mobile"?<b>{location?.emailMobile}</b>:<b>{location?.emailaddress}</b>}
+        Enter the verification code sent to you on {location?.status === "Mobile" ? <b>{location?.emailMobile}</b> : <b>{location?.emailaddress}</b>}
         </div>
       <Grid size={12} >
         <div style={{marginBottom:5,fontFamily: "Ubuntu"}}>

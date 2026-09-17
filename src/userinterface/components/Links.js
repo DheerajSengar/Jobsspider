@@ -1,16 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import Grid from "@mui/material/Grid2";
-import { Button } from "@mui/material";
-import { displayName } from "react-quill";
-import { Margin } from "@mui/icons-material";
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 export default function HireCity() {
    const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('sm'));
-  const [showAll, setShowAll] = useState(false);
+  const showAll = false;
   const Links = [
     "Download Apna App",
    "Free Job Alerts",

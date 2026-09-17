@@ -5,7 +5,7 @@ export default function TitleComponent({title})
    <div style={{display:'flex',flexDirection:'column'}}>
     <div style={{display:'flex',alignItems:'center'}} >
     <div style={{marginLeft:5,marginTop:5}}>
-        <img src='/spider.png' style={{width:40}}/>
+        <img src='/spider.png' style={{width:40}} alt="JobsSpider Logo" />
     </div>
     <div style={{fontWeight:700,fontSize:24}}  >
       JobsSpider
@@ -18,7 +18,7 @@ export default function TitleComponent({title})
 
 
     <div style={{margin:5}}>
-        <img src='/report.png' style={{width:40}}/>
+        <img src='/report.png' style={{width:40}} alt="Report Icon" />
     </div>
     
 

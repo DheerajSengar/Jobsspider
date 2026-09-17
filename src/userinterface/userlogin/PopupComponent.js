@@ -115,7 +115,14 @@ export default function PopupComponent({ open, setClose}) {
 
             <div style={{ padding: 10, color: 'gray', fontSize: '14px' }}>
               Create a new account or login with your existing JobsSpider credentials to connect with Numeric infosystem Pvt. Ltd.{' '}
-              <a href="#" style={{ color: '#1565c0', textDecoration: 'none' }}>Learn more</a> about this partnership.
+              <button
+                type="button"
+                style={{ background: 'none', border: 'none', padding: 0, color: '#1565c0', cursor: 'pointer', textDecoration: 'underline', font: 'inherit' }}
+                onClick={handleNext}
+              >
+                Learn more
+              </button>{' '}
+              about this partnership.
             </div>
 
             <button
@@ -126,7 +133,6 @@ export default function PopupComponent({ open, setClose}) {
                 padding: '15px',
                 marginTop: matches ? '50px' : '0px',
                 borderRadius: '30px',
-                cursor: 'pointer',
                 fontSize: 18,
                 fontWeight: 'bold',
                 cursor: 'pointer'

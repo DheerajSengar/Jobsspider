@@ -1,8 +1,7 @@
-import { TextField, Button, Divider } from "@mui/material";
+import { TextField, Button } from "@mui/material";
 import { useState } from "react";
 import { homeStyles } from "./HomeCss";
 import { useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom";
 import { useSelector,useDispatch } from "react-redux";
 export default function Email() {
   const classes = homeStyles();

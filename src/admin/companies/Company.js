@@ -1,5 +1,4 @@
 
-import Radio from '@mui/material/Radio';
 import TitleComponent from '../components/TitleComponent';
 import {useStyles} from "./CompanyCss"
 import { Button, Divider, TextField } from "@mui/material";
@@ -29,8 +28,6 @@ export default function Company()
     const [aboutCompany,setAboutCompany]=useState('')
     const [registrationNo,setRegistrationNo]=useState('')
     const [panCard,setPanCard]=useState('')
-    const [password,setPassword]=useState('')
-    const [verified,setVerified]=useState('')
     const [stateList,setStateList]=useState([])
     const [cityList,setCityList]=useState([])
     const fetchAllState = async () => {
@@ -94,67 +91,65 @@ export default function Company()
         setAboutCompany("")
         setRegistrationNo("")
         setPanCard("")
-        setPassword("")
-        setVerified("")
         setIcon({byte:'',filename:'case.png'})
     }
     const validateData=()=>{
      var error=false
-     if(companyName.length==0)
+     if(companyName.length===0)
      {
         handleError('companyname',"Companyyname should not be blank...")
          error=true 
     }
-    if(companyOwner.length==0)
+    if(companyOwner.length===0)
         {
            handleError('companyowner',"Companyowner should not be blank...")
             error=true 
        }
-       if(companyAddress.length==0)
+       if(companyAddress.length===0)
         {
            handleError('companyaddress',"Companyaddress should not be blank...")
             error=true 
        }
-       if(stateId.length==0)
+       if(stateId.length===0)
         {
            handleError('stateid',"stateid should not be blank...")
             error=true 
        }
-       if(cityId.length==0)
+       if(cityId.length===0)
         {
            handleError('cityid',"cityid should not be blank...")
             error=true 
        }
-       if(emailId.length==0)
+       if(emailId.length===0)
         {
            handleError('emailid',"emailid should not be blank...")
             error=true 
        }
 
-       if(mobileNo.length==0)
+       if(mobileNo.length===0)
         {
            handleError('mobileno',"mobileno should not be blank...")
             error=true 
        }
-       if(contactPerson.length==0)
+       if(contactPerson.length===0)
         {
            handleError('contactperson',"contactperson should not be blank...")
             error=true 
        }
        
-       if(registrationNo.length==0)
+       if(registrationNo.length===0)
         {
            handleError('registrationno',"registrationno should not be blank...")
             error=true 
        }
-       if(panCard.length==0)
+       if(panCard.length===0)
         {
            handleError('panCard',"pancard should not be blank...")
             error=true 
        }
        
        
-    if(icon.byte.length==0)
+    if(icon.byte.length===0)
         {
            handleError('filename',"Please choose icon for category....")
             error=true 
@@ -166,7 +161,7 @@ export default function Company()
     }
     const handleClick=async()=>{
        var error=validateData()
-     if(error==false)
+     if(error===false)
         {   
 
      var formData=new  FormData()   
@@ -320,7 +315,7 @@ clearData()
 
             <Grid size={6} style={{display:'flex',justifyContent:'center',alignItems:'center',flexDirection:'column'}}>
                
-                <img src={icon.filename} style={{width:'12%'}}/>
+                <img src={icon.filename} style={{width:'12%'}} alt="Company Logo" />
                 <div className={classes.helperTextStyle}>{formError.filename}</div>
             </Grid>
 

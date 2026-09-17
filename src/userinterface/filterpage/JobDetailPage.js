@@ -9,9 +9,6 @@ import BookmarkIcon from '@mui/icons-material/Bookmark';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PaymentsOutlinedIcon from '@mui/icons-material/PaymentsOutlined';
-import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
-import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
-import BusinessOutlinedIcon from '@mui/icons-material/BusinessOutlined';
 import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -42,8 +39,34 @@ export default function JobDetailPage() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    fetchJobDetails();
-    fetchRelatedJobs();
+    const loadDetails = async () => {
+      setLoading(true);
+      try {
+        const res = await postData("companyjobs/fetch_job_by_id", { jobid });
+        if (res.status && res.data) {
+          setJob(res.data);
+          if (user && user.mobileno) {
+            checkAppliedStatus(res.data.jobid, user.mobileno);
+          }
+        } else {
+          setError(res.message || "Job details not found.");
+        }
+      } catch (err) {
+        setError("Failed to fetch job details.");
+      } finally {
+        setLoading(false);
+      }
+
+      try {
+        const resRel = await getData("userinterface/trending_jobs");
+        if (resRel.status && resRel.data) {
+          setRelatedJobs(resRel.data.slice(0, 4));
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    loadDetails();
   }, [jobid]);
 
   const fetchJobDetails = async () => {

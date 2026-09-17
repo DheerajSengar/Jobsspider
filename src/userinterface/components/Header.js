@@ -10,12 +10,10 @@ import { useTheme } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
-import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import DrawerComponent from './DrawerComponent';
 import PopupComponent from '../userlogin/PopupComponent';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import userlogin from "../../assets/user.png";
 
 export default function Header() {
   var location = useSelector(state => state.user);

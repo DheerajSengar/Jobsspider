@@ -14,9 +14,7 @@ export default function Popularjobs() {
     "Accounts / Finance Jobs",
     "Sales (Field Work)",
     "Human Resource",
-    "Backoffice Jobs",
-,    
-    
+    "Backoffice Jobs"
   ];
   const popularjobs2 = [
     "Business Development ",

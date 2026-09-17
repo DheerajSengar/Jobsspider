@@ -1,5 +1,4 @@
 import { Button, Paper } from "@mui/material";
-import GppGoodIcon from '@mui/icons-material/GppGood';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
@@ -33,7 +32,7 @@ export default function LastFilterComponent() {
             </div>
 
             <div style={{ position: 'relative' }} >
-                <img src='mobile.png' style={{ width: 210, height: '330px', marginTop:matches?41:12, display: 'flex', justifySelf: 'center' }} />
+                <img src='mobile.png' style={{ width: 210, height: '330px', marginTop:matches?41:12, display: 'flex', justifySelf: 'center' }} alt="Mobile App Profile Preview" />
                 <Button variant='contained' style={{ display: 'flex', width:matches?'90%':'180px', justifySelf: 'center', color: '#ffff', background: '#b03a84', borderColor: 'green', position: 'absolute', top: 280, right:35, textTransform: 'none' }}>Create Profile</Button>
             </div>
 

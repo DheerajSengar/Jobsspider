@@ -1,7 +1,5 @@
 import invertQuote from "../../assets/invertQuote.png"
-import StarIcon from '@mui/icons-material/Star';
-import StarHalfIcon from '@mui/icons-material/StarHalf';
-import { Paper,Stack,Rating } from "@mui/material";
+import { Stack,Rating } from "@mui/material";
 import ReviewScroll from "./ReviewScroll";
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
@@ -18,7 +16,7 @@ export default function UserReviewComponent(){
  <div style={{width:"100%", display:'flex',flexDirection:matches?'column':'row' , height:"auto"}}>
     <div style={{width:matches?"100%":"30%", height:"475px",background:"#218c74"}} >
     <div >
-    <img src={invertQuote} style={{width:"80px",height:"80px", marginLeft:"80px",marginTop:"35px"}}/>
+    <img src={invertQuote} style={{width:"80px",height:"80px", marginLeft:"80px",marginTop:"35px"}} alt="Quote Icon" />
     </div>
     <div style={{fontSize:28,fontWeight:'bolder',marginTop:"40px", fontFamily:"Ubuntu", color:"#fff",marginLeft:"80px", lineHeight:1.6}}>
    <p>

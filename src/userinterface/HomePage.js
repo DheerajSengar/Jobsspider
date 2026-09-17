@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Divider } from "@mui/material";
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
-import { homeStyles } from "./HomeCss";
 import Header from "./components/Header";
 import ScrollComponent from "./components/ScrollComponent";
 import TrendingJobsComponent from "./components/TrendingJobsComponent";
@@ -21,7 +20,6 @@ import SearchJobs from "./components/SearchJobs";
 export default function Home() {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('sm'));
-  const classes = homeStyles();
   
   const [topCompanies, setTopCompanies] = useState([]);
   const [trendingJobs, setTrendingJobs] = useState([]);

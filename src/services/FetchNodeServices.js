@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const serverURL = process.env.REACT_APP_SERVER_URL || (process.env.NODE_ENV === 'production' ? '' : 'http://localhost:5000');
+const serverURL = process.env.REACT_APP_SERVER_URL || 'https://jobsspider-3.onrender.com';
 
 const getAuthHeaders = () => {
   const token = localStorage.getItem('token') || localStorage.getItem('adminToken');

@@ -32,7 +32,7 @@ return(
                             </div>
 
                             <div style={{ display: 'flex', flexDirection: 'row', padding: 10, gap: 5 }}>
-                                <img src="address.png" style={{ width: 20, height: 20 }} />
+                                <img src="address.png" style={{ width: 20, height: 20 }} alt="Address Icon" />
                                 <div style={{display:'flex',flexDirection:'column'}}> 
                                 <div style={{fontSize:16,color:'rgb(127, 124, 124)'}}>Address</div>
                                  <div style={{fontSize:16,}}>{data.companyaddress},{data.cityname},{data.statename}</div>

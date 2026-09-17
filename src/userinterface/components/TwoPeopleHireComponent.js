@@ -39,6 +39,7 @@ export default function TwoPeopleHireComponenet() {
       <div style={{display:'flex',alignItems:'center',justifyContent:'center',marginTop:matches?45:0}} >
         <img
           src={`${serverURL}/images/two-people.png`}
+          alt="Two People Hiring Illustration"
         />
       </div>
 

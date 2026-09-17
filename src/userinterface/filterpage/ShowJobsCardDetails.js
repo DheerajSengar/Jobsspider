@@ -15,7 +15,6 @@ export default function ShowJobsCardDetails({ data = {} }) {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down('sm'));
   const user = useSelector(state => state.user);
-  const navigate = useNavigate();
 
   const [applied, setApplied] = useState(false);
   const [loading, setLoading] = useState(false);

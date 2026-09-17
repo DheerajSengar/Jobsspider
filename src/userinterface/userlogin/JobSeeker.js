@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import { homeStyles } from "./HomeCss";
 import  Grid  from '@mui/material/Grid2';
  import welcome from '../../assets/welcome.png'
-import { useNavigate,useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 export default function JobSeeker() {
     const classes = homeStyles();
@@ -12,7 +12,7 @@ export default function JobSeeker() {
     const location=useSelector(state=>state.user)
     var status=location?.status
     const handleJobSeeker=()=>{
-      if(status=="Mobile")
+      if(status === "Mobile")
       navigate("/mobileotp")
       else
       navigate("/emailverify")
@@ -23,7 +23,7 @@ export default function JobSeeker() {
       <div style={{display:"flex",justifyContent:"center"}}>
     <div style={{ display: 'flex', alignItems: 'center'}} >
               <div style={{ marginRight:5,marginTop:60 }}>
-                <img src='/spider.png' style={{ width: 40 }} />
+                <img src='/spider.png' style={{ width: 40 }} alt="JobsSpider Logo" />
               </div>
               <div style={{ fontWeight: 700, fontSize: 24,marginTop:60 }}  >
                 JobsSpider
@@ -37,7 +37,7 @@ export default function JobSeeker() {
     <div  className={classes.box} style={{width:480,height:400, backgroundColor: 'white',border:'0.09rem #dfe6e9 solid',borderRadius:10}} >
       <div style={{backgroundColor:'rgb(229, 251, 255)', height:228 ,marginBottom:10}}>
         <div style={{display:'flex',alignItems:'center',justifyContent:'center'}}>
-        <img src={welcome} style={{width:150, marginBottom: "8px",marginTop:20}}/>
+        <img src={welcome} style={{width:150, marginBottom: "8px",marginTop:20}} alt="Welcome Illustration" />
       
         </div>
         
