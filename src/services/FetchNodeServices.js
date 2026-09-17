@@ -1,44 +1,46 @@
-import axios from 'axios'
-const serverURL = process.env.REACT_APP_SERVER_URL || (process.env.NODE_ENV === 'production' ? '' : 'http://localhost:5000')
+import axios from 'axios';
 
-const postData=async(url,body)=>
-{ 
-    try
-    {
-       var response=await axios.post(`${serverURL}/${url}`,body)  
-       var data=response.data
-       return data
-    }
-    catch(e)
-    {
-        return null
-    }
+const serverURL = process.env.REACT_APP_SERVER_URL || (process.env.NODE_ENV === 'production' ? '' : 'http://localhost:5000');
 
-}
+const getAuthHeaders = () => {
+  const token = localStorage.getItem('token') || localStorage.getItem('adminToken');
+  return token ? { Authorization: `Bearer ${token}` } : {};
+};
 
-const getData=async(url)=>
-    { 
-        try
-        {
-           var response=await axios.get(`${serverURL}/${url}`)  
-           var data=response.data
-           return data
-        }
-        catch(e)
-        {
-            return null
-        }
-    
-    }
-    
-const passwordGenerator=()=>{
- var p=parseInt(Math.random()*899999)+100000
- return p
+const postData = async (url, body) => {
+  try {
+    const fullUrl = url.startsWith('http') ? url : `${serverURL}/${url.replace(/^\//, '')}`;
+    const response = await axios.post(fullUrl, body, {
+      headers: getAuthHeaders()
+    });
+    return response.data;
+  } catch (e) {
+    console.error(`Error in postData [${url}]:`, e);
+    return e.response?.data || { status: false, message: e.message || 'Network Error' };
+  }
+};
 
-}
-const generateOtp=()=>{
-    var ot=parseInt(Math.random()*899999)+100000
-    alert(ot)
-    return(ot)
-   }
-export{serverURL,generateOtp,postData,getData,passwordGenerator}
+const getData = async (url) => {
+  try {
+    const fullUrl = url.startsWith('http') ? url : `${serverURL}/${url.replace(/^\//, '')}`;
+    const response = await axios.get(fullUrl, {
+      headers: getAuthHeaders()
+    });
+    return response.data;
+  } catch (e) {
+    console.error(`Error in getData [${url}]:`, e);
+    return e.response?.data || { status: false, message: e.message || 'Network Error' };
+  }
+};
+
+const passwordGenerator = () => {
+  return Math.floor(100000 + Math.random() * 900000);
+};
+
+const generateOtp = () => {
+  const ot = Math.floor(100000 + Math.random() * 900000);
+  console.log('Generated OTP:', ot);
+  return ot;
+};
+
+export { serverURL, generateOtp, postData, getData, passwordGenerator, getAuthHeaders };

@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
-var upload = require('./multer')
-var pool = require('./pool')
+var upload = require('./multer');
+var pool = require('./pool');
+var { verifyAdmin } = require('../middleware/authMiddleware');
 
 router.get("/display_all_category",function(req,res,next){
     try
@@ -48,7 +49,7 @@ router.post("/display_all_subcategory",function(req,res,next){
 })
 
 
-router.post('/submit_skills',function (req,res,next) {
+router.post('/submit_skills', verifyAdmin, function (req,res,next) {
     try
     {
       pool.query('INSERT INTO requiredskills ( categoryid, subcategoryid, skills ) VALUES (?,?,?)',[req.body.categoryid , req.body.subcategoryid , req.body.skills],function(error,result){
@@ -92,7 +93,7 @@ router.post('/submit_skills',function (req,res,next) {
     }
   })
 
-  router.post("/delete_requiredskills",function (req,res,next) {
+  router.post("/delete_requiredskills", verifyAdmin, function (req,res,next) {
     try{
       pool.query('delete from requiredskills where skillid=?',[req.body.skillsid],function(error,result){
           if(error){
@@ -110,7 +111,7 @@ router.post('/submit_skills',function (req,res,next) {
     }
   })
 
-  router.post("/edit_requiredskills_data",function (req,res,next) {
+  router.post("/edit_requiredskills_data", verifyAdmin, function (req,res,next) {
     try{
       console.log(req.body.subcategoryid)
       pool.query("update requiredskills set categoryid=?, subcategoryid=?, skills=?  where skillid=?",[req.body.categoryid,req.body.subcategoryid,req.body.skills,req.body.skillsid],function(error,result){

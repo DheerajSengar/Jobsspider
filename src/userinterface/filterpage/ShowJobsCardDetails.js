@@ -1,95 +1,199 @@
-import { Button, Divider, Paper } from "@mui/material";
-import HomeIcon from '@mui/icons-material/Home';
+import { useState } from "react";
+import { Button, Divider, Paper, Typography } from "@mui/material";
 import ShareIcon from '@mui/icons-material/Share';
+import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import zIndex from "@mui/material/styles/zIndex";
-import { serverURL } from "../../services/FetchNodeServices";
+import { serverURL, postData } from "../../services/FetchNodeServices";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import PopupComponent from "../userlogin/PopupComponent";
 
+export default function ShowJobsCardDetails({ data = {} }) {
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.down('sm'));
+  const user = useSelector(state => state.user);
+  const navigate = useNavigate();
 
+  const [applied, setApplied] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [popOpen, setPopOpen] = useState(false);
 
-export default function ShowJobsCardDatails({data}) {
-  
-      const theme = useTheme();
-      const matches = useMediaQuery(theme.breakpoints.down('sm'));
-   
-    return (<div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <div style={{ width:matches?'100%':'50Vw', height: 'auto', display: 'flex', justifyContent: 'center' }}>
-     <Paper
-   //   key={job.companyid}
-        elevation={0}
+  const handleApply = async () => {
+    if (!user) {
+      setPopOpen(true);
+      return;
+    }
+
+    if (!data.jobid) {
+      Swal.fire('Error', 'Invalid Job selection.', 'error');
+      return;
+    }
+
+    setLoading(true);
+    const res = await postData('userinterface/apply_job', {
+      jobid: data.jobid,
+      user_email: user.emailaddress || user.emailMobile,
+      user_phone: user.mobileno || ''
+    });
+    setLoading(false);
+
+    if (res.status) {
+      setApplied(true);
+      Swal.fire({
+        icon: 'success',
+        title: 'Application Submitted!',
+        text: 'Your application has been successfully sent to the employer.',
+        confirmButtonColor: '#0d6efd'
+      });
+    } else {
+      Swal.fire('Notice', res.message || 'Failed to submit application.', 'info');
+    }
+  };
+
+  const handleSaveJob = async () => {
+    if (!user) {
+      setPopOpen(true);
+      return;
+    }
+
+    const res = await postData('userinterface/save_job', { jobid: data.jobid });
+    if (res.status) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Job Saved!',
+        text: 'Job has been added to your saved bookmarks.',
+        timer: 1500,
+        showConfirmButton: false
+      });
+    } else {
+      Swal.fire('Notice', res.message || 'Job already saved.', 'info');
+    }
+  };
+
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: `${data.jobtype || 'Job'} at ${data.companyname}`,
+        url: window.location.href
+      }).catch(() => {});
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      Swal.fire('Copied!', 'Job link copied to clipboard.', 'success');
+    }
+  };
+
+  const logoUrl = (data.companylogo || data.logo || '').startsWith('http')
+    ? (data.companylogo || data.logo)
+    : `${serverURL}/images/${data.logo || 'spider.png'}`;
+
+  return (
+    <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+      <Paper
+        elevation={2}
         style={{
-        backgroundColor: '#ffff',
-        padding:10,
-        width:matches?'100%':'50vw',
-        height:matches?'auto': '320px',
-        borderRadius:10,
-        
-     }} >
-
-    <div style={{display:'flex'}} >
-        <img src={`${serverURL}/images/${data.logo}`} style={{maxWidth:40,objectFit:'contain'}} />
-       <div style={{display:'flex',flexDirection:'column'}}> 
-        <div style={{fontSize:20,fontWeight:600}}>
-        {data.categoryname} {data.subcategoryname}
-        </div>
-        <div  style={{fontSize:14,color:'rgb(124, 119, 119)'}}>
-        {data.companyname}
-        </div>
-     </div>
-    </div>
-
-    <div style={{display:'flex',flexDirection:matches?'column':'row'}}>
-        <div style={{display:'flex',alignItems:'center'}}>
-        <img src="pin.png" style={{width:20,height:20}} />
-         {data.jobtype}
-        </div>
-        <div style={{display:'flex',marginLeft:matches?'':'auto'}}>
-        <img src="money.png" style={{width:20,height:20}} />
-        ₹{data.minsalary}-₹{data.maxsalary} Monthly
-        </div>
-    </div>
-    <div style={{width:matches?'100%':'50vw',flexDirection:matches?'column':'row',height:'15vh',backgroundColor:'rgb(242 242 243 / var(--tw-bg-opacity, 1))',borderRadius:15,display:'flex',alignItems:matches?'':'center',marginTop:10}}>
-        <div style={{display:'flex',flexDirection:matches?'row':'column',gap:'20px',margin:10, Color:'rgb(191, 186, 186)'}} >
-          <div>
-          Fixed
+          backgroundColor: '#ffffff',
+          padding: 24,
+          width: matches ? '100%' : '50vw',
+          borderRadius: 12,
+          border: '1px solid #e0e0e0'
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: 16 }}>
+          <img
+            src={logoUrl}
+            alt={data.companyname}
+            onError={(e) => { e.target.src = '/spider.png'; }}
+            style={{ width: 50, height: 50, objectFit: 'contain', borderRadius: 8, marginRight: 16, border: '1px solid #eeeeee' }}
+          />
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <Typography variant="h6" style={{ fontWeight: 800, color: '#212529' }}>
+              {data.jobtype || `${data.categoryname || ''} ${data.subcategoryname || ''}`}
+            </Typography>
+            <Typography variant="body2" style={{ color: '#6c757d', fontWeight: 600 }}>
+              {data.companyname}
+            </Typography>
           </div>
-          <div>  ₹{data.minsalary}-₹{data.maxsalary} Monthly</div>
         </div>
-        {matches?<Divider style={{width:'90%',margin:10}}/>:<></>}
-        
-        <div style={{display:'flex',marginLeft:matches?'10px':'100px',marginTop:10}}>
-        <div style={{display:'flex',flexDirection:matches?'row':'column',gap:'20px'}} >
-          <div>
-          Earning Potential
+
+        <div style={{ display: 'flex', gap: 16, margin: '16px 0', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#e9ecef', padding: '6px 12px', borderRadius: 6, fontSize: 14, color: '#495057' }}>
+            📍 Location: {typeof data.worklocationcity === 'string' ? data.worklocationcity : 'As Listed'}
           </div>
-          <div> 
-          ₹{data.maxsalary}</div>
+          <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#d1e7dd', padding: '6px 12px', borderRadius: 6, fontSize: 14, color: '#0f5132', fontWeight: 700 }}>
+            💰 &#8377;{Number(data.minsalary || 0).toLocaleString()} - &#8377;{Number(data.maxsalary || 0).toLocaleString()} / yr
+          </div>
         </div>
+
+        <Paper
+          elevation={0}
+          style={{
+            padding: 16,
+            backgroundColor: '#f8f9fa',
+            borderRadius: 10,
+            display: 'flex',
+            justifyContent: 'space-around',
+            margin: '16px 0',
+            border: '1px solid #e9ecef'
+          }}
+        >
+          <div style={{ textAlign: 'center' }}>
+            <Typography variant="caption" style={{ color: '#6c757d', display: 'block' }}>Experience</Typography>
+            <Typography variant="subtitle2" style={{ fontWeight: 700 }}>{data.experience || 'Not Specified'}</Typography>
+          </div>
+          <Divider orientation="vertical" flexItem />
+          <div style={{ textAlign: 'center' }}>
+            <Typography variant="caption" style={{ color: '#6c757d', display: 'block' }}>Schedule</Typography>
+            <Typography variant="subtitle2" style={{ fontWeight: 700 }}>{data.schedule || 'Full-time'}</Typography>
+          </div>
+          <Divider orientation="vertical" flexItem />
+          <div style={{ textAlign: 'center' }}>
+            <Typography variant="caption" style={{ color: '#6c757d', display: 'block' }}>Posted Date</Typography>
+            <Typography variant="subtitle2" style={{ fontWeight: 700 }}>{data.postdate ? new Date(data.postdate).toLocaleDateString() : 'Recent'}</Typography>
+          </div>
+        </Paper>
+
+        <div style={{ display: 'flex', gap: 12, marginTop: 24 }}>
+          <Button
+            variant="contained"
+            disabled={loading || applied}
+            onClick={handleApply}
+            style={{
+              flex: 2,
+              height: 48,
+              backgroundColor: applied ? '#198754' : '#0d6efd',
+              color: '#ffffff',
+              textTransform: 'none',
+              fontWeight: 800,
+              fontSize: '1rem',
+              borderRadius: 8
+            }}
+            startIcon={applied ? <CheckCircleIcon /> : null}
+          >
+            {applied ? 'Applied' : loading ? 'Submitting...' : 'Apply For Job'}
+          </Button>
+          <Button
+            variant="outlined"
+            onClick={handleSaveJob}
+            style={{ height: 48, borderColor: '#6c757d', color: '#495057', textTransform: 'none', fontWeight: 700, borderRadius: 8 }}
+            startIcon={<BookmarkBorderIcon />}
+          >
+            Save
+          </Button>
+          <Button
+            variant="outlined"
+            onClick={handleShare}
+            style={{ height: 48, borderColor: '#198754', color: '#198754', textTransform: 'none', fontWeight: 700, borderRadius: 8 }}
+            startIcon={<ShareIcon />}
+          >
+            Share
+          </Button>
         </div>
+      </Paper>
+
+      <PopupComponent open={popOpen} setClose={setPopOpen} />
     </div>
-
-         <div  style={{display:'flex',flexDirection:'row',marginTop:15,gap:2}}> 
-         <div style={{display:'flex',flexDirection:'row',  background:'rgb(242 242 243 / var(--tw-bg-opacity, 1))',width:150,borderRadius:2}}>
-         <img src="wfh.png" style={{width:20,height:20,margin:2}} />
-         <div>{data.jobtype}</div>
-        </div>
-        <div style={{display:'flex',flexDirection:'row',  background:'rgb(242 242 243 / var(--tw-bg-opacity, 1))',width:100,borderRadius:2}}>
-         <img src="fulltime.png" style={{width:20,height:20,margin:2}} />
-         <div>{data.schedule}</div>
-        </div>
-        <div style={{display:'flex',flexDirection:'row', background:'rgb(242 242 243 / var(--tw-bg-opacity, 1))',width:100,borderRadius:2}}>
-         <img src="experience.png" style={{width:20,height:20,margin:2}} />
-         <div>{data.experience}</div>
-        </div>
-        </div>
-
-     <div style={{display:'flex',gap:10,marginTop:30,position:matches?'relative':'',zIndex:matches?1:''}}>
-        <Button variant="contained" style={{width:matches?'80%':'40vw',height:50,border:'1px solid #b03a84',background:'#b03a84',textTransform:'none', fontWeight:700}}>Apply For Job </Button>
-        <Button variant="text" style={{width:matches?'20%':'10vw', height: 50, border: '1px solid green', color:'green',background: '#ffffff'}} startIcon={<ShareIcon />}>Share</Button>
-     </div>
-       
-    </Paper>
-  </div>
-    </div>)
+  );
 }

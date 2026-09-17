@@ -7,43 +7,38 @@ import  Grid  from '@mui/material/Grid2';
 import mobile from '../../assets/mobile.png'
 import { TextField } from '@mui/material';
 import { generateOtp } from '../../services/FetchNodeServices';
-import { useEffect,useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch,useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import Swal from 'sweetalert2';
+
 export default function EmailVerify() {
     const classes = homeStyles();
-    const navigate=useNavigate()
-    const [otp,setOtp]=useState('')
-    const dispatch=useDispatch()
-    var location=useSelector(state=>state.user)
-    alert(JSON.stringify(location))
+    const navigate = useNavigate();
+    const [otp, setOtp] = useState('');
+    const dispatch = useDispatch();
+    var location = useSelector(state => state.user);
+
     useEffect(function(){
-    var ot=generateOtp()  
-    var temp=location
-    temp['ot']=ot
-    setOtp(ot)
-    dispatch({type:'ADD_USER',payload:temp})
+      var ot = generateOtp();  
+      setOtp(ot);
+      if (location) {
+        dispatch({ type: 'ADD_USER', payload: { ...location, ot } });
+      }
+    }, []);
 
-
-
-    },[])
-    const handleChange=(e)=>{
-      if(e.target.value.length==6)
-      {
-        if(otp==e.target.value && location?.status=="Mobile")
-        {
-          navigate("/password")
-        }
-        if(otp==e.target.value && location?.status=="Email")
-        {
-           navigate("/mobile")
-        }  
-        else
-        {
-          alert("Invalid password")
+    const handleChange = (e) => {
+      if (e.target.value.length === 6) {
+        if (String(otp) === String(e.target.value)) {
+          if (location?.status === "Mobile") {
+            navigate("/password");
+          } else {
+            navigate("/mobile");
+          }
+        } else {
+          Swal.fire('Invalid Code', 'The verification code entered is incorrect.', 'error');
         }
       }
-
     }
   return (
     <div style={{backgroundColor:"rgb(240, 240, 240)"}}>

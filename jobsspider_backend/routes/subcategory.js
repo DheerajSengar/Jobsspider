@@ -2,9 +2,10 @@ var express = require("express");
 var router = express.Router();
 var upload = require("./multer");
 var pool = require("./pool");
+var { verifyAdmin } = require("../middleware/authMiddleware");
 
 router.post(
-  "/submit_subcategory",upload.single("icon"),function (req, res, next) {
+  "/submit_subcategory", verifyAdmin, upload.single("icon"), function (req, res, next) {
     try {
       pool.query(
         "insert into subcategory ( subcategoryid,categoryid,subcategoryname,subcategorypicture) values(?,?,?,?)",
@@ -27,7 +28,7 @@ router.post(
 );
 
 router.post(
-  "/edit_subcategory_data",function (req, res, next) {
+  "/edit_subcategory_data", verifyAdmin, function (req, res, next) {
     try {
       pool.query("update subcategory set subcategoryname=? where subcategoryid=?",
         [req.body.subcategoryname, req.body.subcategoryid],function (error, result) {
@@ -48,7 +49,7 @@ router.post(
 );
 
 router.post(
-  "/edit_subcategory_picture",upload.single("icon"),function (req, res, next) {
+  "/edit_subcategory_picture", verifyAdmin, upload.single("icon"), function (req, res, next) {
     try {
       pool.query( "update subcategory set subcategorypicture=? where subcategoryid=?",
         [req.file.filename, req.body.subcategoryid],function (error, result) {
@@ -67,7 +68,7 @@ router.post(
     }
   }
 );
-router.post("/delete_subcategory", function (req, res, next) {
+router.post("/delete_subcategory", verifyAdmin, function (req, res, next) {
     try {
       pool.query(
       "delete  from subcategory  where subcategoryid=?",

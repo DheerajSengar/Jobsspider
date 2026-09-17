@@ -1,28 +1,30 @@
+let savedUser = null;
+try {
+  const item = localStorage.getItem("USER");
+  savedUser = item && item !== 'null' && item !== 'undefined' ? JSON.parse(item) : null;
+} catch (e) {
+  savedUser = null;
+}
 
+const initialState = {
+  user: savedUser
+};
 
-const initialState={
-  user:null
- }
+export default function RootReducer(state = initialState, action) {
+  switch (action.type) {
+    case 'ADD_USER':
+      localStorage.setItem("USER", JSON.stringify(action.payload));
+      if (action.token) {
+        localStorage.setItem("token", action.token);
+      }
+      return { ...state, user: action.payload };
 
- export default function RootReducer(state=initialState,actions)
- {
-    switch(actions.type)
-    {
-        case 'ADD_USER':
-        
-            state.user=actions.payload
-            console.log("REDUCER K ANDAR:",state.user)
-            localStorage.setItem("USER",JSON.stringify(actions.payload))
-            return ({user:state.user})
-        case 'DELETE_USER':    
-        state.user=null
-        localStorage.setItem("USER",state.user)
-        return ({user:state.user})
+    case 'DELETE_USER':
+      localStorage.removeItem("USER");
+      localStorage.removeItem("token");
+      return { ...state, user: null };
 
-  
-        default:
-            return state
-
-    }
-   
- }
+    default:
+      return state;
+  }
+}

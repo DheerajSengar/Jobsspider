@@ -1,158 +1,91 @@
-import { TextField, Button, Divider } from "@mui/material";
+import { Divider } from "@mui/material";
 import { useState } from "react";
-import GetJobComponent from "./GetJobsComponent";
 import { serverURL } from "../../services/FetchNodeServices";
 import SearchBarComponent from "./SearchBarComponent";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import SearchIcon from "@mui/icons-material/Search";
 import SearchBarMob from "./SearchBarMob";
 
 export default function SearchJobs() {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("sm"));
-
-  const [isClicked, setIsClicked] = useState(false);
-  var Data = [
-    {
-      candidatename: "Shivani Singh ",
-      title: "got Job",
-      picture: "maingirl3.png",
-    },
-    {
-      candidatename: "Siddhart Shivhare ",
-      title: "got Job",
-      picture: "maingirl3.png",
-    },
-    {
-      candidatename: "Pankaj Sharma",
-      title: "has fixed an interview ",
-      picture: "maingirl3.png",
-    },
-    {
-      candidatename: "Rohit Singh ",
-      title: "has fixed an interview",
-      picture: "maingirl3.png",
-    },
-    {
-      candidatename: "Amnendra singh  ",
-      title: "got Job",
-      picture: "maingirl3.png",
-    },
-    {
-      candidatename: "Shivam Rajput",
-      title: "got Job",
-      picture: "maingirl3.png",
-    },
-    {
-      candidatename: "Priyanshu",
-      title: "has fixed an interview",
-      picture: "maingirl3.png",
-    },
-    {
-      candidatename: "Neeraj Verma",
-      title: "has fixed an interview",
-      picture: "maingirl3.png",
-    },
-    { candidatename: "Nikhil", title: "got Job", picture: "maingirl3.png" },
-  ];
+  const [imgError, setImgError] = useState(false);
 
   return (
     <div
       style={{
-        height: matches ? 650 : "auto",
-        paddingTop: 20,
+        position: "relative",
+        overflow: "hidden",
+        paddingTop: 40,
+        paddingBottom: matches ? 30 : 60,
         background:
-          "linear-gradient(270deg, rgba(253, 254, 250, 0.09) 15%, rgba(199, 253, 134, 0.69) 100%)",
+          "linear-gradient(135deg, rgba(253, 254, 250, 0.9) 0%, rgba(199, 253, 134, 0.45) 100%)",
       }}
     >
-      <div
-        style={{
-          fontSize: matches ? 18 : 20,
-          fontWeight: "bolder",
-          display: "flex",
-          justifyContent: "flex-start",
-          marginLeft: matches ? 20 : 80,
-          marginTop: matches ? 40 : 60,
-          height: "auto",
-          color: "#b42f6b",
-        }}
-      >
-        INDIA’S #1 JOB PLATFORM
-      </div>
-      <div
-        style={{
-          fontSize: matches ? 34 : 60,
-          fontWeight: "bolder",
-          display: "flex",
-          justifyContent: "flex-start",
-          marginLeft: matches ? 20 : 80,
-          marginTop: matches ? 15 : 20,
-          height: "auto",
-        }}
-      >
-        Your job search ends here
-      </div>
-      <div
-        style={{
-          fontSize: matches ? 14 : 25,
-          display: "flex",
-          justifyContent: "flex-start",
-          marginLeft: matches ? 20 : 80,
-          marginTop: matches ? 16 : 20,
-          height: "auto",
-        }}
-      >
-        Discover 50 lakh+ career opportunities
-      </div>
-
-      <div
-        style={{
-          marginLeft: matches ? 5 : 80,
-          marginTop: matches ? 30 : 60,
-        }}
-      >
-        {matches ? <></> : <SearchBarComponent />}
-
-        {matches ? (
-          <div>
-            <SearchBarMob />
-          </div>
-        ) : (
-          <></>
-        )}
+      <div style={{ maxWidth: 1300, margin: "0 auto", padding: matches ? "0 16px" : "0 40px" }}>
+        <div
+          style={{
+            fontSize: matches ? 14 : 16,
+            fontWeight: "800",
+            letterSpacing: 1.5,
+            color: "#b42f6b",
+            textTransform: "uppercase",
+            marginBottom: 8,
+          }}
+        >
+          INDIA’S #1 JOB PLATFORM
+        </div>
 
         <div
           style={{
-            display: "flex",
-            justifyContent: "flex-end",
-            justifyItems: "flex-end",
-            backgroundColor: "transparent",
-            position: "relative",
+            fontSize: matches ? 32 : 54,
+            fontWeight: "800",
+            color: "#1e293b",
+            lineHeight: 1.15,
+            marginBottom: 12,
+            maxWidth: matches ? "100%" : "60%",
           }}
         >
-          <img
-            src={`${serverURL}/images/main_girl.png`}
-            style={{
-              position: "absolute",
-              width: matches ? "85%" : "36%",
-              top: matches ? -80 : -330,
-              zIndex: matches ? -1 : 0,
-              left: matches ? 0 : "",
-            }}
-          />
+          Your job search ends here
+        </div>
+
+        <div
+          style={{
+            fontSize: matches ? 15 : 22,
+            color: "#475569",
+            fontWeight: 500,
+            marginBottom: 36,
+          }}
+        >
+          Discover 50 lakh+ career opportunities
+        </div>
+
+        <div style={{ position: "relative", zIndex: 5, marginBottom: 20 }}>
+          {matches ? <SearchBarMob /> : <SearchBarComponent />}
         </div>
       </div>
 
-      {matches ? (
-        <></>
-      ) : (
-        <div style={{ marginTop: 245 }}>
-          {/* <GetJobComponent data={Data} />*/}
-        </div>
+      {/* Hero Candidate Image bounded inside section */}
+      {!imgError && (
+        <img
+          src={`${serverURL}/images/main_girl.png`}
+          onError={() => setImgError(true)}
+          alt="JobsSpider Candidate"
+          style={{
+            position: "absolute",
+            right: matches ? -40 : 40,
+            bottom: 0,
+            maxHeight: matches ? "220px" : "360px",
+            maxWidth: matches ? "50%" : "38%",
+            objectFit: "contain",
+            zIndex: 1,
+            pointerEvents: "none",
+            opacity: matches ? 0.35 : 0.95,
+          }}
+        />
       )}
 
-      {matches ? <></> : <Divider style={{ marginTop: 50 }} />}
+      {!matches && <Divider style={{ marginTop: 40, opacity: 0.5 }} />}
     </div>
   );
 }

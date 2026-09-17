@@ -6,18 +6,20 @@ import reportWebVitals from './reportWebVitals';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import RootReducer from './services/Storage/RootReducer';
-var store=createStore(RootReducer)
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
+const store = createStore(RootReducer);
+const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID || '448469104195-c8fm7fqudjr6tcv9dra4nhdq4b3eo1rd.apps.googleusercontent.com';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-    <App />
+      <GoogleOAuthProvider clientId={googleClientId}>
+        <App />
+      </GoogleOAuthProvider>
     </Provider>
   </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

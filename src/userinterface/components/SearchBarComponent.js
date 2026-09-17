@@ -18,24 +18,39 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useNavigate } from "react-router-dom";
 import { getData } from "../../services/FetchNodeServices";
 
+const defaultSkills = [
+  { skillid: 1, categoryid: 1, subcategoryid: 1, skills: "Information Technology (IT) - Full Stack Developer" },
+  { skillid: 2, categoryid: 1, subcategoryid: 1, skills: "Frontend Developer (React.js / Next.js)" },
+  { skillid: 3, categoryid: 1, subcategoryid: 1, skills: "Backend Developer (Node.js / Java / Python)" },
+  { skillid: 4, categoryid: 1, subcategoryid: 2, skills: "Data Science & Data Analyst" },
+  { skillid: 5, categoryid: 2, subcategoryid: 3, skills: "Sales & Marketing - Digital Marketing" },
+  { skillid: 6, categoryid: 2, subcategoryid: 4, skills: "Business Development & Sales Executive" },
+  { skillid: 7, categoryid: 3, subcategoryid: 5, skills: "Finance & Accounting - GST / Tally" },
+  { skillid: 8, categoryid: 4, subcategoryid: 6, skills: "Human Resources (HR) & Talent Acquisition" },
+  { skillid: 9, categoryid: 5, subcategoryid: 7, skills: "Design & Creative - UI/UX Designer" },
+  { skillid: 10, categoryid: 1, subcategoryid: 1, skills: "MERN Stack Developer" }
+];
+
 export default function SearchBarComponent({ param_skill, refresh, setRefresh, exp, setExp }) {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("sm"));
   const navigate = useNavigate();
   
-  const [skill, setSkill] = useState({ skillid: 0, categoryid: 0, subcategoryid: 0, skills: "" });
-  const [topSkill, setTopSkill] = useState([]);
+  const [skill, setSkill] = useState(null);
+  const [topSkill, setTopSkill] = useState(defaultSkills);
   const [expr, setExpr] = useState(0);
 
   const fetchAllSkill = async () => {
     try {
       const res = await getData('userinterface/fetch_all_skills');
-      if (res && res.data) {
+      if (res && res.data && Array.isArray(res.data) && res.data.length > 0) {
         setTopSkill(res.data);
+      } else {
+        setTopSkill(defaultSkills);
       }
     } catch (error) {
       console.error('Error fetching skills:', error);
-      setTopSkill([]);
+      setTopSkill(defaultSkills);
     }
   };
 
@@ -44,7 +59,7 @@ export default function SearchBarComponent({ param_skill, refresh, setRefresh, e
   }, []);
 
   const handleSearch = () => {
-    const tskill = { ...skill };
+    const tskill = skill ? { ...skill } : {};
     tskill['exp'] = exp !== undefined ? exp : expr;
     const queryString = new URLSearchParams(tskill).toString();
     navigate(`/searchjobs?${queryString}`);
@@ -91,7 +106,7 @@ export default function SearchBarComponent({ param_skill, refresh, setRefresh, e
       ]}
       style={{
         ...props.style,
-        width: 300,
+        width: 320,
         overflowY: "auto",
         zIndex: 1200,
       }}
@@ -111,20 +126,27 @@ export default function SearchBarComponent({ param_skill, refresh, setRefresh, e
           gap: "10px",
         }}
       >
-        {/* Skill Autocomplete */}
+        {/* Skill / Stream Autocomplete */}
 
         <Autocomplete
           fullWidth
-          value={param_skill == undefined ? skill : param_skill}
-          sx={{ flex: 1 }}
+          value={param_skill !== undefined ? param_skill : skill}
+          sx={{ flex: 1.2 }}
           options={topSkill}
+          isOptionEqualToValue={(option, value) => {
+            if (!option || !value) return false;
+            return option.skillid === value.skillid || option.skills === value.skills;
+          }}
           onChange={(event, newValue) => {
-            setSkill(newValue)
-           
+            setSkill(newValue);
           }}
           PopperComponent={CustomPopper}
           autoHighlight
-          getOptionLabel={(option) => option.skills}
+          getOptionLabel={(option) => {
+            if (!option) return "";
+            if (typeof option === 'string') return option;
+            return option.skills || option.categoryname || "";
+          }}
           renderOption={(props, option) => (
             <Box
               component="li"
@@ -133,10 +155,12 @@ export default function SearchBarComponent({ param_skill, refresh, setRefresh, e
                 display: "flex",
                 alignItems: "center",
                 gap: 1,
+                fontSize: 13,
+                padding: "8px 12px"
               }}
             >
-              <SearchIcon sx={{ color: "#8395a7" }} />
-              {option.skills}
+              <SearchIcon sx={{ color: "#8395a7", fontSize: 18 }} />
+              {option.skills || option.categoryname}
             </Box>
           )}
           renderInput={(params) => (
@@ -149,7 +173,7 @@ export default function SearchBarComponent({ param_skill, refresh, setRefresh, e
                 },
               }}
               overflow="none"
-              placeholder="Select a skill"
+              placeholder="Select stream / skill"
               variant="standard"
               InputProps={{
                 ...params.InputProps,
@@ -157,7 +181,7 @@ export default function SearchBarComponent({ param_skill, refresh, setRefresh, e
 
                 startAdornment: (
                   <InputAdornment position="start">
-                    <SearchIcon sx={{ fontSize: 15 }} />
+                    <SearchIcon sx={{ fontSize: 16 }} />
                   </InputAdornment>
                 ),
               }}

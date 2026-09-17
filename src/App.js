@@ -6,6 +6,7 @@ import SearchBarMob2 from "./userinterface/components/SearchBarMob2";
 import MainShowFilterJobsComponent from "./userinterface/filterpage/MainShowFilterJobsComponent";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ShowJobsCards from "./userinterface/filterpage/ShowJobsCards"
+import JobDetailPage from "./userinterface/filterpage/JobDetailPage"
 import Email from "./userinterface/userlogin/Email"
 import ReadyNextPage from "./userinterface/userlogin/ReadyNextPage"
 import EmailVerify from "./userinterface/userlogin/EmailVerify"
@@ -28,6 +29,7 @@ function App() {
           <Route element={<DashboardAdmin />} path="/dashboardadmin/*" />
           <Route element={<HomePage />} path="/" />
           <Route element={<ShowJobsCards />} path="/showjobscards" />
+          <Route element={<JobDetailPage />} path="/job/:jobid" />
           <Route element={<SearchBarMob2 />} path="/searchbarmob2" />
           <Route element={<MainShowFilterJobsComponent />} path="/searchjobs" />
       

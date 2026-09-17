@@ -1,15 +1,12 @@
 var express = require('express');
 var router = express.Router();
-var upload = require('./multer')
+var upload = require('./multer');
 var pool = require('./pool');
-/* GET home page. */
-router.post('/submit_companyjobs', function (req, res, next) {
-    try {
-        // Ensure `skills` is a valid integer or NULL
-        // const skills = Number.isInteger(Number(req.body.skills)) 
-        //     ? Number(req.body.skills) 
-        //     : null;
+var { verifyAdmin } = require('../middleware/authMiddleware');
 
+/* POST submit company job */
+router.post('/submit_companyjobs', verifyAdmin, function (req, res, next) {
+    try {
         pool.query(
             `INSERT INTO company_jobs 
             (companyid, categoryid, subcategoryid, skills, educationqualification,benifits, experience, jobdeatails, jobtype, minsalary, maxsalary, schedule, worklocationcity, supplementalpay, postdate, applicationdeadline, expectedstart, applicationquestion, contactperson, emailaddress, mobileno)
@@ -26,7 +23,7 @@ router.post('/submit_companyjobs', function (req, res, next) {
                     console.error(error);
                     res.status(500).json({ status: false, message: 'Database Error... Please Contact with DBA...' });
                 } else {
-                    res.status(200).json({ status: true, message: 'Required skills information submitted successfully' });
+                    res.status(200).json({ status: true, message: 'Job posted successfully' });
                 }
             }
         );
@@ -130,7 +127,7 @@ router.get('/display_all', function (req, res, next) {
 
 });
 
-router.post('/edit_companyjobs_data', function (req, res, next) {
+router.post('/edit_companyjobs_data', verifyAdmin, function (req, res, next) {
     try {
         pool.query("update company_jobs set companyid=?, categoryid=?, subcategoryid=?, skills=?, educationqualification=?,benifits=?, experience=?, jobdeatails=?, jobtype=?, minsalary=?, maxsalary=?, schedule=?, worklocationcity=?, supplementalpay=?, postdate=?, applicationdeadline=?, expectedstart=?, applicationquestion=?, contactperson=?, emailaddress=?, mobileno=? where jobid=?", [req.body.companyid, req.body.categoryid, req.body.subcategoryid, req.body.skills, req.body.educationqualification, req.body.benifits,
             req.body.experience, req.body.jobdeatails, req.body.jobtype, req.body.minsalary, req.body.maxsalary, req.body.schedule,
@@ -142,8 +139,7 @@ router.post('/edit_companyjobs_data', function (req, res, next) {
                 res.status(500).json({ status: false, message: 'Database Error...pls Contact with DBA...' })
             }
             else {
-
-                res.status(200).json({ status: true, message: 'required Skill  updated Successfully' })
+                res.status(200).json({ status: true, message: 'Job details updated successfully' })
             }
         })
     }

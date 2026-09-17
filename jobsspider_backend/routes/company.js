@@ -1,9 +1,11 @@
 var express = require('express');
 var router = express.Router();
-var upload = require('./multer')
+var upload = require('./multer');
 var pool = require('./pool');
+var { verifyAdmin } = require('../middleware/authMiddleware');
+
 /* GET home page. */
-router.post('/submit_company', upload.single('icon'), function (req, res, next) {
+router.post('/submit_company', verifyAdmin, upload.single('icon'), function (req, res, next) {
     console.log(req.body)
     try {
         pool.query("insert into companies (companyname, companyowner, companyaddress, stateid, cityid, emailid, mobileno, contactperson, aboutcompany, registrationno, pancard, password, verified, logo) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [req.body.companyname, req.body.companyowner, req.body.companyaddress, req.body.stateid, req.body.cityid, req.body.emailid, req.body.mobileno, req.body.contactperson, req.body.aboutcompany, req.body.registrationno, req.body.pancard, req.body.password, req.body.verified, req.file.filename], function (error, result) {
@@ -23,7 +25,7 @@ router.post('/submit_company', upload.single('icon'), function (req, res, next) 
 });
 
 
-router.post('/update_company_verify', function (req, res, next) {
+router.post('/update_company_verify', verifyAdmin, function (req, res, next) {
     console.log(req.body)
     try {
         pool.query("update companies  set verified=? where companyid=?", [req.body.verified, req.body.companyid], function (error, result) {
@@ -62,7 +64,7 @@ router.get('/display_all', function (req, res, next) {
 
 });
 
-router.post('/edit_company_data', upload.single('icon'), function (req, res, next) {
+router.post('/edit_company_data', verifyAdmin, upload.single('icon'), function (req, res, next) {
     try {
         pool.query("update companies set companyname=?, companyowner=?, companyaddress=?, stateid=?, cityid=?, emailid=?, mobileno=?, contactperson=?, aboutcompany=?, registrationno=?, pancard=?   where companyid=?", [req.body.companyname, req.body.companyowner, req.body.companyaddress, req.body.stateid, req.body.cityid, req.body.emailid, req.body.mobileno, req.body.contactperson, req.body.aboutcompany, req.body.registrationno, req.body.pancard, req.body.companyid], function (error, result) {
             if (error) {
@@ -71,7 +73,7 @@ router.post('/edit_company_data', upload.single('icon'), function (req, res, nex
             }
             else {
 
-                res.status(200).json({ status: true, message: 'Category Name updated Successfully' })
+                res.status(200).json({ status: true, message: 'Company information updated Successfully' })
             }
         })
     }
@@ -82,7 +84,7 @@ router.post('/edit_company_data', upload.single('icon'), function (req, res, nex
 });
 
 
-router.post('/edit_company_picture', upload.single('icon'), function (req, res, next) {
+router.post('/edit_company_picture', verifyAdmin, upload.single('icon'), function (req, res, next) {
     try {
         console.log("BODY:", req.body)
         pool.query("update companies set logo=? where companyid=?", [req.file.filename, req.body.companyid], function (error, result) {
@@ -91,7 +93,7 @@ router.post('/edit_company_picture', upload.single('icon'), function (req, res, 
                 res.status(200).json({ status: false, message: 'Database Error..Pls Contact DBA...' })
             }
             else {
-                res.status(200).json({ status: true, message: 'Category Picture Updated Successfully' })
+                res.status(200).json({ status: true, message: 'Company Logo Updated Successfully' })
             }
 
         })
@@ -105,7 +107,7 @@ router.post('/edit_company_picture', upload.single('icon'), function (req, res, 
 
 
 
-router.post('/delete_company', upload.single('icon'), function (req, res, next) {
+router.post('/delete_company', verifyAdmin, upload.single('icon'), function (req, res, next) {
     try {
         pool.query(" delete from companies where companyid=?", [req.body.companyid], function (error, result) {
             if (error) {

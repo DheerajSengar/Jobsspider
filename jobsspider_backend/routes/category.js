@@ -1,10 +1,11 @@
 var express = require('express');
 var router = express.Router();
-var upload=require('./multer')
-var pool=require('./pool')
+var upload = require('./multer');
+var pool = require('./pool');
+var { verifyAdmin } = require('../middleware/authMiddleware');
 
 /* GET home page. */
-router.post('/submit_category',upload.single("icon"), function(req, res, next) {
+router.post('/submit_category', verifyAdmin, upload.single("icon"), function(req, res, next) {
   try{
     console.log("BODY:",req.body)
     pool.query("insert into category (categoryname,categorypicture) values(?,?)",[req.body.categoryname,req.file.filename],function(error,result){
@@ -26,7 +27,7 @@ router.post('/submit_category',upload.single("icon"), function(req, res, next) {
   }
 });
 
-router.post('/edit_category_data', function(req, res, next) {
+router.post('/edit_category_data', verifyAdmin, function(req, res, next) {
   try{
     console.log("BODY:",req.body)
     pool.query("update category set categoryname=? where categoryid=?",[req.body.categoryname,req.body.categoryid],function(error,result){
@@ -49,7 +50,7 @@ router.post('/edit_category_data', function(req, res, next) {
 });
 
 
-router.post('/edit_category_picture',upload.single('icon'), function(req, res, next) {
+router.post('/edit_category_picture', verifyAdmin, upload.single('icon'), function(req, res, next) {
   try{
     console.log("BODY:",req.body)
     pool.query("update category set categorypicture=? where categoryid=?",[req.file.filename,req.body.categoryid],function(error,result){
@@ -71,7 +72,7 @@ router.post('/edit_category_picture',upload.single('icon'), function(req, res, n
   }
 });
 
-router.post('/delete_category', function(req, res, next) {
+router.post('/delete_category', verifyAdmin, function(req, res, next) {
   try{
     console.log("BODY:",req.body)
     pool.query("delete from category where categoryid=?",[req.body.categoryid],function(error,result){

@@ -4,29 +4,41 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { postData } from "../../services/FetchNodeServices";
+import Swal from 'sweetalert2';
+
 export default function Password() {
   const classes = homeStyles();
-  const navigate=useNavigate()
-  const location=useSelector(state=>state.user)
-  const [password,setPassword]=useState('')
-  const handleSubmit=async()=>{
-    if(location?.status=="Mobile"){
-    var body={mobileno:location?.emailMobile,emailaddress:location?.emailaddress,password}
-      }
-    else if(location?.status=="Email")
-    {
-      var body={mobileno:location?.emailaddress,emailaddress:location?.emailMobile,password}
-    }  
-    var result=await postData("userinterface/insert_record",body)
-     if(result.status)
-     {
-      navigate("/")
-     }
-     else
-     {
-      alert(result.message)
-     }
-  }
+  const navigate = useNavigate();
+  const location = useSelector(state => state.user);
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = async () => {
+    if (!password || password.length < 6) {
+      Swal.fire('Password Required', 'Please enter a password with at least 6 characters.', 'warning');
+      return;
+    }
+
+    let body = {};
+    if (location?.status === "Mobile") {
+      body = { mobileno: location?.emailMobile, emailaddress: location?.emailaddress, password };
+    } else {
+      body = { mobileno: location?.emailaddress, emailaddress: location?.emailMobile, password };
+    }
+
+    const result = await postData("userinterface/insert_record", body);
+    if (result.status) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Account Created!',
+        text: 'Welcome to JobsSpider. You can now browse and apply for jobs.',
+        timer: 1500,
+        showConfirmButton: false
+      });
+      navigate("/");
+    } else {
+      Swal.fire('Registration Failed', result.message || 'Could not create account.', 'error');
+    }
+  };
   return (
 <div style={{backgroundColor:"rgb(240, 240, 240)"}}>
     <div style={{display:"flex",justifyContent:"center"}}>
@@ -51,7 +63,7 @@ export default function Password() {
         </div>
         
        
-        
+         
        
         {/* Input Section */}
         <div style={{ marginBottom: "16px",fontFamily:"Ubuntu",fontWeight:'bold'}}>
@@ -59,18 +71,16 @@ export default function Password() {
             Password
          </div>
           <TextField
+            type="password"
             onChange={(e)=>setPassword(e.target.value)}
-            label="Password use at least 8 Characters"
+            label="Password (min 6 characters)"
             placeholder="Password"
             fullWidth
             required
           />
         </div>
         <div style={{ fontWeight: "lighter",fontFamily:'Ubuntu', fontSize: "0.9rem", marginBottom: "16px", color: "gray" }}>
-            By creating an account or signing in, you understand and agree to Indeed's Terms.
-            You also acknowledge our Cookie and Privacy policies. You will receive marketing 
-            messages from Indeed and may opt out at any time by following the unsubscribe link
-            in our messages, or as detailed in our terms.
+            By creating an account or signing in, you agree to JobsSpider's Terms of Service and Privacy Policy.
         </div>
 
         <Button
