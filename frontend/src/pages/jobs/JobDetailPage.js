@@ -37,6 +37,19 @@ export default function JobDetailPage() {
   const [popOpen, setPopOpen] = useState(false);
   const [relatedJobs, setRelatedJobs] = useState([]);
 
+  const checkAppliedStatus = async (jobId, mobile) => {
+    if (!user || !user.userid) return;
+    try {
+      const res = await getData('userinterface/user_applications');
+      if (res && res.status && Array.isArray(res.data)) {
+        const hasApplied = res.data.some(a => String(a.jobid) === String(jobId));
+        setApplied(hasApplied);
+      }
+    } catch (e) {
+      console.error('Failed to check applied status', e);
+    }
+  };
+
   useEffect(() => {
     window.scrollTo(0, 0);
     const loadDetails = async () => {
