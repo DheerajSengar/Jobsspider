@@ -1,4 +1,4 @@
-﻿import { Paper } from "@mui/material";
+import { Paper } from "@mui/material";
 import React, { useEffect } from 'react';
 import Slider from '@mui/material/Slider'
 import { useState } from 'react';
@@ -154,13 +154,14 @@ export default function FirstFilterComponent({exp,setExp,time,setTime}) {
        <FormControlLabel value="0" control={<Radio sx={{ '& .MuiSvgIcon-root': { fontSize: 18,color:'#b03a84' } }}  />} label="All" sx={{marginBottom:-1, '& .MuiFormControlLabel-label': { fontSize: '14px' }}} />
                             <FormControlLabel value="1" control={<Radio sx={{ '& .MuiSvgIcon-root': { fontSize: 18,color:'#b03a84'  } }} />} label="Last 24 hours" sx={{marginBottom:-1, '& .MuiFormControlLabel-label': { fontSize: '14px' }}} />
                             <FormControlLabel value="3" control={<Radio sx={{ '& .MuiSvgIcon-root': { fontSize: 18,color:'#b03a84'  } }} />} label="Last 3 Days" sx={{marginBottom:-1, '& .MuiFormControlLabel-label': { fontSize: '14px' }}} />
-                            <FormControlLabel value="7" control={<Radio  sx={{ '& .MuiSvgIcon-root': { fontSize: 18,color:'#b03a84'  } }}/>} label="Last 7 Days" sx={{marginBottom:-1, '& .MuiFormControlLabel-label': { fontSize:Â '14px'Â }}}Â />
+                            <FormControlLabel value="7" control={<Radio  sx={{ '& .MuiSvgIcon-root': { fontSize: 18,color:'#b03a84'  } }}/>} label="Last 7 Days" sx={{marginBottom:-1, '& .MuiFormControlLabel-label': { fontSize: '14px' }}} />
       </RadioGroup>
     </FormControl>
     </div>
                     </div>
                    
-      Â Â 
+      
+                 
             
 
 
