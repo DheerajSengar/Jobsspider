@@ -5,7 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-import RootReducer from './services/storage/RootReducer';
+import RootReducer from './services/Storage/RootReducer';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
 const store = createStore(RootReducer);
