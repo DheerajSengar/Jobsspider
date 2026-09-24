@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Paper, Typography } from "@mui/material";
 import { serverURL } from "../../services/api/FetchNodeServices";
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';

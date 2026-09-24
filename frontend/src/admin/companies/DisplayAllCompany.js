@@ -1,4 +1,4 @@
-﻿import MaterialTable from "@material-table/core";
+import MaterialTable from "@material-table/core";
 import { Divider, TextField } from "@mui/material";
 import TitleComponent from "../../components/admin/TitleComponent";
 import Grid from "@mui/material/Grid2";

@@ -1,4 +1,4 @@
-﻿import { Paper, Divider } from "@mui/material";
+import { Paper, Divider } from "@mui/material";
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import JobRole from "./JobRoleComponent";

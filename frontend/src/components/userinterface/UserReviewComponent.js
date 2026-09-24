@@ -1,4 +1,4 @@
-﻿import invertQuote from "../../assets/invertQuote.png"
+import invertQuote from "../../assets/invertQuote.png"
 import { Stack,Rating } from "@mui/material";
 import ReviewScroll from "./ReviewScroll";
 import useMediaQuery from '@mui/material/useMediaQuery';

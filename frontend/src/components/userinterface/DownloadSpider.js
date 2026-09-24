@@ -1,4 +1,4 @@
-﻿import StarIcon from '@mui/icons-material/Star';
+import StarIcon from '@mui/icons-material/Star';
 import DownloadIcon from '@mui/icons-material/Download';
 import { serverURL } from '../../services/api/FetchNodeServices';
 export default function DownloadSpider(){

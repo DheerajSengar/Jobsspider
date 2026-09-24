@@ -1,4 +1,4 @@
-﻿import LoginPage from "./admin/login/LoginPage";
+import LoginPage from "./admin/login/LoginPage";
 import DashboardAdmin from "./admin/login/DashboardAdmin";
 import CompanyVerification from "./admin/companies/CompanyVerification";
 import HomePage from "./pages/HomePage";

@@ -1,4 +1,4 @@
-﻿import { Divider } from "@mui/material";
+import { Divider } from "@mui/material";
 import { useState } from "react";
 import { serverURL } from "../../services/api/FetchNodeServices";
 import SearchBarComponent from "./SearchBarComponent";

@@ -1,4 +1,4 @@
-﻿import TitleComponent from '../../components/admin/TitleComponent';
+import TitleComponent from '../../components/admin/TitleComponent';
 import { useStyles } from "./CompanyJobsCss"
 import { Button, Divider, FormHelperText, TextField } from "@mui/material";
 import Grid from "@mui/material/Grid2";

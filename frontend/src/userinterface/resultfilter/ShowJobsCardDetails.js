@@ -1,4 +1,4 @@
-﻿import { Button, Divider, Paper } from "@mui/material";
+import { Button, Divider, Paper } from "@mui/material";
 import HomeIcon from '@mui/icons-material/Home';
 import ShareIcon from '@mui/icons-material/Share';
 import { useTheme } from '@mui/material/styles';

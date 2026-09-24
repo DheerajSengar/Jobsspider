@@ -1,4 +1,4 @@
-﻿import { Divider } from "@mui/material";
+import { Divider } from "@mui/material";
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useLocation } from "react-router";

@@ -1,4 +1,4 @@
-﻿import { Paper } from "@mui/material"
+import { Paper } from "@mui/material"
 import {serverURL} from "../../services/api/FetchNodeServices"
 
 export default function GetJobs({item})

@@ -1,4 +1,4 @@
-﻿import axios from 'axios';
+import axios from 'axios';
 
 // Set REACT_APP_API_URL in the environment for each deployment target.
 const serverURL = (process.env.REACT_APP_API_URL || process.env.REACT_APP_SERVER_URL || '').replace(/\/$/, '');

@@ -1,4 +1,4 @@
-﻿import spider from "../../assets/spider.png";
+import spider from "../../assets/spider.png";
 import FacebookSharpIcon from "@mui/icons-material/FacebookSharp";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";

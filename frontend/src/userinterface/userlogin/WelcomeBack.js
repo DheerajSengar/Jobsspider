@@ -1,4 +1,4 @@
-﻿import { homeStyles } from "./HomeCss";
+import { homeStyles } from "./HomeCss";
 import google from "../../assets/google.png";
 
 export default function WelcomeBack() {

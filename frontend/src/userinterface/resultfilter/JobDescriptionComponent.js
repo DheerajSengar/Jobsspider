@@ -1,4 +1,4 @@
-﻿import { Paper, Button, Accordion } from "@mui/material";
+import { Paper, Button, Accordion } from "@mui/material";
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';

@@ -1,4 +1,4 @@
-﻿import { useStyles } from "./RequiredSkillsCSS";
+import { useStyles } from "./RequiredSkillsCSS";
 import TitleComponent from "../../components/admin/TitleComponent";
 import Grid from "@mui/material/Grid2";
 import { Divider,Button , TextField } from "@mui/material";

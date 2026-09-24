@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import Grid from "@mui/material/Grid2";
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';

@@ -1,4 +1,4 @@
-﻿import TrendingJobs from "./TrendingJobs";
+import TrendingJobs from "./TrendingJobs";
 import { Paper } from "@mui/material";
 
 export default function TrendingJobsComponent({ items = [], colors = [] }) {

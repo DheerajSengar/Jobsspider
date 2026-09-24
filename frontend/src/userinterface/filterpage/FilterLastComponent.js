@@ -1,4 +1,4 @@
-﻿import { Button, Paper } from "@mui/material";
+import { Button, Paper } from "@mui/material";
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 

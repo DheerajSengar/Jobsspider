@@ -1,4 +1,4 @@
-﻿let savedUser = null;
+let savedUser = null;
 try {
   const item = localStorage.getItem("USER");
   savedUser = item && item !== 'null' && item !== 'undefined' ? JSON.parse(item) : null;
