@@ -30,9 +30,14 @@ const configuredOrigins = (process.env.FRONTEND_URL || '')
   .map((origin) => origin.trim())
   .filter(Boolean);
 const localOrigins = ['http://localhost:3000', 'http://127.0.0.1:3000'];
+const hostedFrontendOriginPatterns = [
+  /^https:\/\/[^/]+\.vercel\.app$/,
+  /^https:\/\/[^/]+\.netlify\.app$/
+];
 const corsOptions = {
   origin(origin, callback) {
-    if (!origin || localOrigins.includes(origin) || configuredOrigins.includes(origin) || /^https:\/\/[^/]+\.vercel\.app$/.test(origin)) {
+    const isHostedFrontend = hostedFrontendOriginPatterns.some((pattern) => pattern.test(origin));
+    if (!origin || localOrigins.includes(origin) || configuredOrigins.includes(origin) || isHostedFrontend) {
       return callback(null, true);
     }
     return callback(new Error(`CORS origin not allowed: ${origin}`));
