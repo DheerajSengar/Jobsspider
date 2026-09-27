@@ -156,29 +156,58 @@ export default function Header() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" style={{ background: '#ffffff', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
-        <Toolbar>
+      <AppBar position="static" style={{ background: '#ffffff', boxShadow: '0 4px 20px rgba(0,0,0,0.08)', borderBottom: '1px solid #f0f0f0' }}>
+        <Toolbar sx={{ height: 70 }}>
           <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} onClick={() => navigate('/')}>
-            {matches ? <MenuIcon onClick={handleOpenDrawer} style={{ cursor: 'pointer', color: '#000', marginRight: 7 }} /> : <></>}
-            <img src='/spider.png' style={{ width: 36, marginRight: 8 }} alt="JobsSpider Logo" />
-            <Typography variant="h6" style={{ fontWeight: 800, color: '#000', fontFamily: 'Ubuntu', letterSpacing: '-0.5px' }}>
-              Jobs<span style={{ color: '#0d6efd' }}>Spider</span>
+            {matches ? <MenuIcon onClick={handleOpenDrawer} style={{ cursor: 'pointer', color: '#667eea', marginRight: 8, fontSize: 28 }} /> : <></>}
+            <img src='/spider.png' style={{ width: 42, height: 42, marginRight: 10 }} alt="JobsSpider Logo" />
+            <Typography variant="h5" style={{ fontWeight: 900, color: '#1a202c', fontFamily: 'Ubuntu', letterSpacing: '-0.5px', fontSize: matches ? '1.2rem' : '1.5rem' }}>
+              Jobs<span style={{ color: '#667eea' }}>Spider</span>
             </Typography>
           </div>
 
           {!matches && (
-            <div style={{ marginLeft: 30, display: 'flex', alignItems: 'center', flexGrow: 1 }}>
+            <div style={{ marginLeft: 40, display: 'flex', alignItems: 'center', flexGrow: 1 }}>
               {mainMenu()}
-              <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+              <Menu 
+                anchorEl={anchorEl} 
+                open={open} 
+                onClose={handleClose}
+                slotProps={{
+                  paper: {
+                    elevation: 4,
+                    sx: {
+                      borderRadius: 3,
+                      minWidth: 440,
+                      maxHeight: 500,
+                      overflow: 'auto',
+                      boxShadow: '0 10px 40px rgba(0,0,0,0.15)'
+                    }
+                  }
+                }}
+              >
                 {setMenuFormat()}
               </Menu>
             </div>
           )}
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginLeft: 'auto' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginLeft: 'auto' }}>
             {!matches && (
               <Button
-                style={{ textTransform: "none", fontSize: 14, fontWeight: 700, color: "#b03a84" }}
+                variant="outlined"
+                sx={{ 
+                  textTransform: "none", 
+                  fontSize: 14, 
+                  fontWeight: 700, 
+                  color: "#667eea",
+                  padding: '8px 16px',
+                  borderRadius: 2,
+                  border: '2px solid #667eea',
+                  '&:hover': {
+                    background: 'rgba(102, 126, 234, 0.1)',
+                    border: '2px solid #667eea'
+                  }
+                }}
                 onClick={() => navigate('/loginpage')}
               >
                 Employer / Admin Login
@@ -186,29 +215,42 @@ export default function Header() {
             )}
 
             {matches ? (
-              <AccountBoxIcon style={{ fontSize: 35, color: "#b03a84", cursor: 'pointer' }} onClick={handleClickUser} />
+              <AccountBoxIcon style={{ fontSize: 38, color: "#667eea", cursor: 'pointer' }} onClick={handleClickUser} />
             ) : location == null ? (
               <Button
                 variant="contained"
-                style={{
-                  textTransform: "capitalize",
+                sx={{
+                  textTransform: "none",
                   fontSize: 14,
                   fontWeight: 700,
-                  background: "#b03a84",
+                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                   color: '#ffffff',
-                  borderRadius: 6,
-                  padding: '6px 20px'
+                  borderRadius: 8,
+                  padding: '10px 24px',
+                  boxShadow: '0 4px 15px rgba(102, 126, 234, 0.4)',
+                  '&:hover': {
+                    background: 'linear-gradient(135deg, #5a6fd6 0%, #6a4190 100%)',
+                    boxShadow: '0 6px 20px rgba(102, 126, 234, 0.6)'
+                  }
                 }}
                 onClick={handleCandidateLogin}
               >
                 Candidate Login
               </Button>
             ) : (
-              <IconButton onClick={handleClickUser}>
+              <IconButton 
+                onClick={handleClickUser}
+                sx={{ 
+                  padding: 4,
+                  '&:hover': {
+                    background: 'rgba(102, 126, 234, 0.1)'
+                  }
+                }}
+              >
                 {location.picture ? (
-                  <Avatar src={location.picture} style={{ width: 36, height: 36 }} />
+                  <Avatar src={location.picture} style={{ width: 40, height: 40, border: '2px solid #667eea' }} />
                 ) : (
-                  <Avatar style={{ width: 36, height: 36, backgroundColor: '#0d6efd' }}>
+                  <Avatar style={{ width: 40, height: 40, backgroundColor: '#667eea', fontWeight: 800, fontSize: 16 }}>
                     {(location.username || location.emailaddress || 'U')[0].toUpperCase()}
                   </Avatar>
                 )}

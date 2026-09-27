@@ -13,10 +13,10 @@ import WorkOutlineOutlinedIcon from "@mui/icons-material/WorkOutlineOutlined";
 import RoomOutlinedIcon from "@mui/icons-material/RoomOutlined";
 import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
 import PlaceOutlinedIcon from "@mui/icons-material/PlaceOutlined";
-import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import { useNavigate } from "react-router-dom";
 import { getData } from "../../services/api/FetchNodeServices";
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const defaultSkills = [
   { skillid: 1, categoryid: 1, subcategoryid: 1, skills: "Information Technology (IT) - Full Stack Developer" },
@@ -32,13 +32,15 @@ const defaultSkills = [
 ];
 
 export default function SearchBarComponent({ param_skill, refresh, setRefresh, exp, setExp }) {
-  const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.down("sm"));
   const navigate = useNavigate();
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.down('sm'));
   
   const [skill, setSkill] = useState(null);
   const [topSkill, setTopSkill] = useState(defaultSkills);
   const [expr, setExpr] = useState(0);
+  const [location, setLocation] = useState(null);
+  const [keyword, setKeyword] = useState('');
 
   const fetchAllSkill = async () => {
     try {
@@ -58,9 +60,21 @@ export default function SearchBarComponent({ param_skill, refresh, setRefresh, e
     fetchAllSkill();
   }, []);
 
+  useEffect(() => {
+    if (param_skill?.skillid || param_skill?.skills) {
+      setSkill(param_skill);
+    }
+  }, [param_skill?.skillid, param_skill?.skills, param_skill?.categoryid, param_skill?.subcategoryid]);
+
   const handleSearch = () => {
     const tskill = skill ? { ...skill } : {};
     tskill['exp'] = exp !== undefined ? exp : expr;
+    if (location?.cityname) {
+      tskill.location = location.cityname;
+    }
+    if (keyword && keyword.trim()) {
+      tskill.keyword = keyword.trim();
+    }
     const queryString = new URLSearchParams(tskill).toString();
     navigate(`/searchjobs?${queryString}`);
     
@@ -121,16 +135,18 @@ export default function SearchBarComponent({ param_skill, refresh, setRefresh, e
           alignItems: "center",
           justifyContent: "flex-start",
           backgroundColor: "white",
-          padding: "10px 10px",
-          borderRadius: "8px",
+          padding: "12px 14px",
+          borderRadius: "14px",
           gap: "10px",
+          border: "1px solid #e5eaf1",
+          boxShadow: "0 12px 28px rgba(32, 48, 74, 0.10)",
         }}
       >
         {/* Skill / Stream Autocomplete */}
 
         <Autocomplete
           fullWidth
-          value={param_skill !== undefined ? param_skill : skill}
+          value={skill}
           sx={{ flex: 1.2 }}
           options={topSkill}
           isOptionEqualToValue={(option, value) => {
@@ -203,7 +219,7 @@ export default function SearchBarComponent({ param_skill, refresh, setRefresh, e
               }
             }
           }}
-          value={experience[exp]}
+          value={experience.find(e => e.expid === (exp !== undefined ? exp : expr)) || experience[0]}
           PopperComponent={CustomPopper}
           autoHighlight
           getOptionLabel={(option) => option.exp}
@@ -262,6 +278,8 @@ export default function SearchBarComponent({ param_skill, refresh, setRefresh, e
         <Autocomplete
           sx={{ flexGrow: 1 }}
           options={worklocation}
+          value={location}
+          onChange={(event, newValue) => setLocation(newValue)}
           PopperComponent={CustomPopper}
           autoHighlight
           getOptionLabel={(option) => option.cityname}
@@ -304,6 +322,28 @@ export default function SearchBarComponent({ param_skill, refresh, setRefresh, e
             />
           )}
         />
+        <Divider orientation="vertical" flexItem />
+        {/* Keyword Search */}
+        <TextField
+          sx={{ flexGrow: 1 }}
+          value={keyword}
+          onChange={(e) => setKeyword(e.target.value)}
+          placeholder="Search by keyword (e.g., React, Developer)"
+          variant="standard"
+          InputProps={{
+            disableUnderline: true,
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon sx={{ fontSize: 15, color: "#8395a7" }} />
+              </InputAdornment>
+            ),
+          }}
+          onKeyPress={(e) => {
+            if (e.key === 'Enter') {
+              handleSearch();
+            }
+          }}
+        />
 
         {/* Search Button */}
         <Button
@@ -313,11 +353,11 @@ export default function SearchBarComponent({ param_skill, refresh, setRefresh, e
             fontSize: 14,
             padding: "5px 10px 5px 10px",
             fontWeight: "bold",
-            backgroundColor: "#b42f6b",
+            backgroundColor: "#bb2e70",
             color: "#fff",
             height: "40px",
-            borderRadius: "5px",
-            "&:hover": { backgroundColor: "#e6496e" },
+            borderRadius: "9px",
+            "&:hover": { backgroundColor: "#9e215c" },
           }}
         >
           Search jobs

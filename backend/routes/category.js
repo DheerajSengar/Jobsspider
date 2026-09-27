@@ -7,7 +7,6 @@ var { verifyAdmin } = require('../middleware/authMiddleware');
 /* GET home page. */
 router.post('/submit_category', verifyAdmin, upload.single("icon"), function(req, res, next) {
   try{
-    console.log("BODY:",req.body)
     pool.query("insert into category (categoryname,categorypicture) values(?,?)",[req.body.categoryname,req.file.filename],function(error,result){
     if(error)
     {   console.log(error)
@@ -29,7 +28,6 @@ router.post('/submit_category', verifyAdmin, upload.single("icon"), function(req
 
 router.post('/edit_category_data', verifyAdmin, function(req, res, next) {
   try{
-    console.log("BODY:",req.body)
     pool.query("update category set categoryname=? where categoryid=?",[req.body.categoryname,req.body.categoryid],function(error,result){
     if(error)
     {   console.log(error)
@@ -52,7 +50,6 @@ router.post('/edit_category_data', verifyAdmin, function(req, res, next) {
 
 router.post('/edit_category_picture', verifyAdmin, upload.single('icon'), function(req, res, next) {
   try{
-    console.log("BODY:",req.body)
     pool.query("update category set categorypicture=? where categoryid=?",[req.file.filename,req.body.categoryid],function(error,result){
     if(error)
     {   console.log(error)
@@ -74,7 +71,6 @@ router.post('/edit_category_picture', verifyAdmin, upload.single('icon'), functi
 
 router.post('/delete_category', verifyAdmin, function(req, res, next) {
   try{
-    console.log("BODY:",req.body)
     pool.query("delete from category where categoryid=?",[req.body.categoryid],function(error,result){
     if(error)
     {   console.log(error)

@@ -49,7 +49,7 @@ router.get('/trending_jobs', function (req, res) {
 // Main search jobs with secure parameterized query
 router.post('/main_search_jobs', function (req, res) {
   try {
-    const { categoryid, subcategoryid, expr, time, cityid, keyword } = req.body;
+    const { categoryid, subcategoryid, expr, time, keyword, location } = req.body;
     let queryConditions = [];
     let queryParams = [];
 
@@ -91,6 +91,11 @@ router.post('/main_search_jobs', function (req, res) {
       queryConditions.push("(C.jobtype LIKE ? OR C.jobdeatails LIKE ? OR CT.categoryname LIKE ? OR SCT.subcategoryname LIKE ? OR C.skills LIKE ?)");
       const term = `%${keyword.trim()}%`;
       queryParams.push(term, term, term, term, term);
+    }
+
+    if (location && location.trim() !== '') {
+      queryConditions.push('C.worklocationcity LIKE ?');
+      queryParams.push(`%${location.trim()}%`);
     }
 
     if (queryConditions.length > 0) {
@@ -148,18 +153,16 @@ router.post('/check_account', function (req, res) {
     }
 
     pool.query(
-      "SELECT userid, mobileno, emailaddress, username, picture, google_id, headline, skills FROM users WHERE emailaddress=? OR mobileno=?",
+      "SELECT userid FROM users WHERE emailaddress=? OR mobileno=?",
       [emailMobile, emailMobile],
       function (error, result) {
         if (error) {
           console.error(error);
           return res.status(500).json({ status: false, message: 'Database error checking account' });
         }
-        if (result.length === 1) {
-          res.status(200).json({ status: true, message: 'Success', data: result[0] });
-        } else {
-          res.status(200).json({ status: false, message: 'Account not found', data: [] });
-        }
+        // Do not expose profile fields here; this endpoint is used only to choose
+        // between the sign-in and registration screens.
+        res.status(200).json({ status: result.length === 1, message: 'Success' });
       }
     );
   } catch (e) {
@@ -171,14 +174,13 @@ router.post('/check_account', function (req, res) {
 router.post('/insert_record', async function (req, res) {
   try {
     const { mobileno, emailaddress, password, username } = req.body;
-    if (!emailaddress || !mobileno) {
-      return res.status(400).json({ status: false, message: 'Mobile and Email are required' });
+    if (!emailaddress || !mobileno || !password) {
+      return res.status(400).json({ status: false, message: 'Mobile, email, and password are required' });
     }
-
-    let hashedPassword = '';
-    if (password) {
-      hashedPassword = await bcrypt.hash(password, 10);
+    if (typeof password !== 'string' || password.length < 8) {
+      return res.status(400).json({ status: false, message: 'Password must contain at least 8 characters.' });
     }
+    const hashedPassword = await bcrypt.hash(password, 12);
 
     // Check if user already exists
     pool.query(
@@ -237,13 +239,9 @@ router.post('/check_password', function (req, res) {
 
         if (result.length === 1) {
           const user = result[0];
-          let isMatch = false;
-
-          if (user.password && (user.password.startsWith('$2a$') || user.password.startsWith('$2b$'))) {
-            isMatch = await bcrypt.compare(password, user.password);
-          } else {
-            isMatch = (user.password === password);
-          }
+          const isMatch = typeof user.password === 'string' && user.password.startsWith('$2')
+            ? await bcrypt.compare(password, user.password)
+            : false;
 
           if (isMatch) {
             delete user.password;
@@ -262,45 +260,30 @@ router.post('/check_password', function (req, res) {
 // Google OAuth Login / Registration Endpoint
 router.post('/google_login', async function (req, res) {
   try {
-    const { token, credential, userInfo } = req.body;
-    let googleId = '';
-    let email = '';
-    let name = '';
-    let picture = '';
-
-    // If credential (id_token) is passed from Google Sign-In button
-    if (credential) {
-      try {
-        const ticket = await googleClient.verifyIdToken({
-          idToken: credential,
-          audience: process.env.GOOGLE_CLIENT_ID
-        });
-        const payload = ticket.getPayload();
-        googleId = payload.sub;
-        email = payload.email;
-        name = payload.name;
-        picture = payload.picture;
-      } catch (verifyErr) {
-        console.warn("Google Token Verification Warn:", verifyErr.message);
-        // Fallback if client ID verification fails or token comes directly from OAuth user object
-        if (userInfo) {
-          googleId = userInfo.sub || userInfo.id;
-          email = userInfo.email;
-          name = userInfo.name;
-          picture = userInfo.picture;
-        } else {
-          return res.status(401).json({ status: false, message: 'Invalid Google credential token.' });
-        }
-      }
-    } else if (userInfo) {
-      googleId = userInfo.sub || userInfo.id;
-      email = userInfo.email;
-      name = userInfo.name;
-      picture = userInfo.picture;
+    const { credential } = req.body;
+    if (!credential || !process.env.GOOGLE_CLIENT_ID) {
+      return res.status(401).json({ status: false, message: 'Google credential is required.' });
     }
 
-    if (!email) {
-      return res.status(400).json({ status: false, message: 'Google authentication failed: Email missing.' });
+    let payload;
+    try {
+      const ticket = await googleClient.verifyIdToken({
+        idToken: credential,
+        audience: process.env.GOOGLE_CLIENT_ID
+      });
+      payload = ticket.getPayload();
+    } catch (verifyErr) {
+      console.warn('Google token verification failed:', verifyErr.message);
+      return res.status(401).json({ status: false, message: 'Invalid Google credential token.' });
+    }
+
+    const googleId = payload.sub;
+    const email = payload.email;
+    const name = payload.name;
+    const picture = payload.picture;
+
+    if (!googleId || !email || !payload.email_verified) {
+      return res.status(401).json({ status: false, message: 'Google account email must be verified.' });
     }
 
     // Check if user exists by email or google_id

@@ -203,15 +203,28 @@ async function initializeDatabase() {
             console.log('[database] schema and seed initialization completed');
         }
 
-        // Seed default admin if none exists
-        const [admins] = await promisePool.query('SELECT * FROM jobspider_admin LIMIT 1');
-        if (admins.length === 0) {
-            const hashedPw = await bcrypt.hash('admin123', 10);
+        // An administrator may be bootstrapped only from explicit deployment
+        // secrets. Never create a known default password in a public service.
+        const [admins] = await promisePool.query('SELECT adminid, emailid, password FROM jobspider_admin');
+        const initialAdminEmail = process.env.INITIAL_ADMIN_EMAIL;
+        const initialAdminPassword = process.env.INITIAL_ADMIN_PASSWORD;
+        if (admins.length === 0 && initialAdminEmail && initialAdminPassword) {
+            if (initialAdminPassword.length < 12) {
+                throw new Error('INITIAL_ADMIN_PASSWORD must contain at least 12 characters');
+            }
+            const hashedPw = await bcrypt.hash(initialAdminPassword, 12);
             await promisePool.query(
                 'INSERT INTO jobspider_admin (adminname, emailid, mobileno, password) VALUES (?, ?, ?, ?)',
-                ['Super Admin', 'admin@jobspider.com', '9999999999', hashedPw]
+                ['Super Admin', initialAdminEmail, null, hashedPw]
             );
-            console.log('[database] default admin account seeded');
+            console.log('[database] initial administrator seeded');
+        } else if (admins.length === 0) {
+            console.warn('[database] no administrator exists; set INITIAL_ADMIN_EMAIL and INITIAL_ADMIN_PASSWORD once to bootstrap one.');
+        } else {
+            const legacyDefaultAdmin = admins.find((admin) => admin.emailid === 'admin@jobspider.com');
+            if (legacyDefaultAdmin && legacyDefaultAdmin.password && await bcrypt.compare('admin123', legacyDefaultAdmin.password)) {
+                console.error('[security] insecure default administrator password detected. Reset this account password in MySQL immediately.');
+            }
         }
     } catch (err) {
         logDatabaseError('initialization', err);

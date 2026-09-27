@@ -29,22 +29,19 @@ const configuredOrigins = (process.env.FRONTEND_URL || '')
   .split(',')
   .map((origin) => origin.trim())
   .filter(Boolean);
-const localOrigins = ['http://localhost:3000', 'http://127.0.0.1:3000'];
-const hostedFrontendOriginPatterns = [
-  /^https:\/\/[^/]+\.vercel\.app$/,
-  /^https:\/\/[^/]+\.netlify\.app$/
-];
+const localOrigins = process.env.NODE_ENV === 'production'
+  ? []
+  : ['http://localhost:3000', 'http://127.0.0.1:3000'];
 const corsOptions = {
   origin(origin, callback) {
-    const isHostedFrontend = hostedFrontendOriginPatterns.some((pattern) => pattern.test(origin));
-    if (!origin || localOrigins.includes(origin) || configuredOrigins.includes(origin) || isHostedFrontend) {
+    if (!origin || localOrigins.includes(origin) || configuredOrigins.includes(origin)) {
       return callback(null, true);
     }
-    return callback(new Error(`CORS origin not allowed: ${origin}`));
+    return callback(new Error('CORS origin not allowed'));
   },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'x-access-token'],
-  credentials: true
+  credentials: false
 };
 app.use(cors(corsOptions));
 

@@ -20,51 +20,80 @@ export default function Email() {
     navigate('/emailverify')
   }
   return (
-<div style={{backgroundColor:"rgb(240, 240, 240)"}}>
+<div style={{backgroundColor:"linear-gradient(135deg, #667eea 0%, #764ba2 100%)", minHeight: '100vh'}}>
+    <div style={{display:"flex",justifyContent:"center", padding: '20px 0'}}>
+    <div style={{ display: 'flex', alignItems: 'center'}} >
+              <div style={{ marginRight: 12 }}>
+                <img src='/spider.png' style={{ width: 48, height: 48 }} alt="JobsSpider Logo" />
+              </div>
+              <div style={{ fontWeight: 800, fontSize: 28, color: '#ffffff' }}  >
+                JobsSpider
+              </div>
+            </div>
+    </div>
     
     <div className={classes.root} style={{display:"flex", justifyContent:"center"}} >
         
-      <div className={classes.box} style={{width:400,height:320,backgroundColor:"white",marginTop:150,border:'0.09rem #dfe6e9 solid'}}  >
+      <div className={classes.box} style={{width:450,height:400,backgroundColor:"white",marginTop:20,borderRadius:16,boxShadow:'0 20px 60px rgba(0,0,0,0.3)',padding:30}}  >
 
-        <div style={{ fontWeight: "bolder", fontFamily: "Ubuntu", fontSize: "1.2rem",marginTop:5, marginBottom: "30px" }}>
-          Add email address for <b>{location.emailMobile}</b>
+        <div style={{ fontWeight: 800, fontFamily: "Ubuntu", fontSize: "20px", marginBottom: 16, textAlign: 'center', color: '#2d3748' }}>
+          Add email address for <b style={{color: '#667eea'}}>{location.emailMobile}</b>
         </div>
-        <div style={{ fontWeight: "lighter",fontStyle:'Ubuntu', fontSize: "0.9rem", marginBottom: "30px", color: "gray" }}>
-           Once you verify this email address, you'll use it to sig in and will no longer recive whatsApp message
-           related to your account. Notification related to your account will be sent to this email address only.
+        <div style={{ fontWeight: 400, fontFamily: "Ubuntu", fontSize: "14px", marginBottom: 32, color: "#718096", textAlign: 'center', lineHeight: 1.6 }}>
+           Once you verify this email address, you'll use it to sign in and will no longer receive WhatsApp messages
+           related to your account. Notifications will be sent to this email address only.
         </div>
         
-       
-        
-       
-     
-        <div style={{ marginBottom: "16px",fontFamily:"Ubuntu",fontWeight:'bold'}}>
-      <div style={{marginBottom:10, fontStyle:'Ubuntu'}}>
+        <div style={{ marginBottom: "24px",fontFamily:"Ubuntu",fontWeight:'bold'}}>
+      <div style={{marginBottom:8, fontStyle:'Ubuntu', color: '#4a5568'}}>
             Email address
          </div>
           <TextField
             onChange={(e)=>setEmailAddress(e.target.value)} 
-            label="Email adrress"
-            placeholder="Email"
+            label="Email address"
+            placeholder="Enter your email"
             fullWidth
             required
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  borderColor: '#e2e8f0',
+                  borderRadius: 8,
+                },
+                '&:hover fieldset': {
+                  borderColor: '#667eea',
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: '#667eea',
+                  borderWidth: 2,
+                },
+              },
+            }}
           />
         </div>
         
 
         <Button
           variant="contained"
-          style={{ borderRadius:7,fontFamily:"Ubuntu",
+          sx={{
+            borderRadius:8,
+            fontFamily:"Ubuntu",
             width: "100%",
-            backgroundColor: "Blue",
+            padding: '14px',
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
             color: "#ffffff",
             textTransform: "none",
-           
+            fontWeight: 700,
+            fontSize: '16px',
+            boxShadow: '0 4px 15px rgba(102, 126, 234, 0.4)',
+            '&:hover': {
+              background: 'linear-gradient(135deg, #5a6fd6 0%, #6a4190 100%)',
+              boxShadow: '0 6px 20px rgba(102, 126, 234, 0.6)',
+            }
           }}
           onClick={handleClick}
-        ><b>
+        >
           Save Email
-          </b>
         </Button>
       </div>
     </div>

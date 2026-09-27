@@ -1,70 +1,25 @@
-import TrendingJobs from "./TrendingJobs";
-import { Paper } from "@mui/material";
+import { Box, Typography } from '@mui/material';
+import TrendingJobs from './TrendingJobs';
+
+const fallbackJobs = [
+  { jobtype: 'Software & IT', total_jobs: 1200, categoryid: 1, subcategoryid: 1 },
+  { jobtype: 'Sales & Marketing', total_jobs: 860, categoryid: 2, subcategoryid: 3 },
+  { jobtype: 'Finance & Accounting', total_jobs: 540, categoryid: 3, subcategoryid: 5 },
+];
 
 export default function TrendingJobsComponent({ items = [], colors = [] }) {
-  const defaultColors = ['#e67e22', '#ffeaa7', '#fd79a8', '#74b9ff', '#2ecc71'];
-  const palette = (colors && colors.length > 0) ? colors : defaultColors;
-
-  const showTrendingJobs = () => {
-    return items.map((item, i) => {
-      return (
-        <TrendingJobs
-          key={item.jobtype || i}
-          index={i}
-          item={item}
-          colors={palette[i % palette.length]}
-        />
-      );
-    });
-  };
-
+  const palette = colors.length ? colors : ['#9b2e65', '#2563eb', '#0f9d79'];
+  const jobs = items.length ? items.slice(0, 6) : fallbackJobs;
   return (
-    <div
-      style={{
-        margin: "20px 10px",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        flexWrap: "wrap",
-        maxWidth: 1400,
-      }}
-    >
-      <Paper
-        elevation={0}
-        style={{
-          padding: "30px 24px",
-          width: 340,
-          height: 250,
-          borderRadius: 18,
-          background: "linear-gradient(135deg, #1e293b 0%, #0f172a 100%)",
-          color: "#ffffff",
-          margin: 12,
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          boxShadow: "0 10px 25px rgba(15, 23, 42, 0.25)",
-        }}
-      >
-        <div
-          style={{
-            fontSize: 12,
-            textTransform: "uppercase",
-            letterSpacing: 2,
-            color: "#fd79a8",
-            fontWeight: "bold",
-            marginBottom: 10,
-          }}
-        >
-          EXPLORE CATEGORIES
-        </div>
-        <div style={{ fontWeight: 800, fontSize: 30, lineHeight: 1.25 }}>
-          Trending Jobs on JobsSpider
-        </div>
-        <div style={{ fontSize: 14, color: "#94a3b8", marginTop: 12 }}>
-          Handpicked roles in high-demand fields across top Indian companies.
-        </div>
-      </Paper>
-      {showTrendingJobs()}
-    </div>
+    <Box component="section" sx={{ width: '100%', maxWidth: 1240, mx: 'auto', px: { xs: 2, md: 4 }, py: { xs: 6, md: 9 } }}>
+      <Box sx={{ maxWidth: 650, mb: 3.5 }}>
+        <Typography sx={{ color: '#bb2e70', fontSize: '.78rem', fontWeight: 850, letterSpacing: 1.4 }}>EXPLORE OPPORTUNITIES</Typography>
+        <Typography sx={{ color: '#17233a', mt: .7, fontWeight: 850, fontSize: { xs: '1.85rem', md: '2.45rem' }, letterSpacing: '-.035em' }}>Roles people are searching for now</Typography>
+        <Typography sx={{ color: '#65748b', mt: 1, lineHeight: 1.6 }}>Start with a popular category or refine your search by skills, experience, and location.</Typography>
+      </Box>
+      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' }, gap: 2 }}>
+        {jobs.map((item, index) => <TrendingJobs key={`${item.jobtype}-${index}`} item={item} index={index} colors={palette[index % palette.length]} />)}
+      </Box>
+    </Box>
   );
 }

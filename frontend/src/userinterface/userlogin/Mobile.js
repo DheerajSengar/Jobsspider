@@ -37,13 +37,13 @@ export default function Mobile() {
   };
 
   return (
-    <div style={{ backgroundColor: "rgb(240, 240, 240)" }}>
-      <div style={{ display: "flex", justifyContent: "center" }}>
+    <div style={{ backgroundColor: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)", minHeight: '100vh' }}>
+      <div style={{ display: "flex", justifyContent: "center", padding: '20px 0' }}>
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <div style={{ marginRight: 5, marginTop: 100 }}>
-            <img src='/spider.png' alt="JobsSpider Logo" style={{ width: 40 }} />
+          <div style={{ marginRight: 12 }}>
+            <img src='/spider.png' alt="JobsSpider Logo" style={{ width: 48, height: 48 }} />
           </div>
-          <div style={{ fontWeight: 700, fontSize: 24, marginTop: 100 }}>
+          <div style={{ fontWeight: 800, fontSize: 28, color: '#ffffff' }}>
             JobsSpider
           </div>
         </div>
@@ -53,28 +53,29 @@ export default function Mobile() {
         <div 
           className={classes.box} 
           style={{ 
-            height: 530, 
-            marginTop: 10, 
+            height: 580, 
+            marginTop: 20, 
             backgroundColor: 'white', 
-            border: '0.09rem #dfe6e9 solid', 
-            borderRadius: 10 
+            borderRadius: 16,
+            boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
+            padding: 30
           }}
         >
-          <div style={{ backgroundColor: "#74b9ff" }}>
+          <div style={{ backgroundColor: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)", borderRadius: '12px', marginBottom: 24, padding: 20 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <img 
                 src={mobile} 
                 alt="Mobile verification"
-                style={{ width: 120, height: 80, marginBottom: "8px", marginTop: 20 }} 
+                style={{ width: 100, height: 70, marginBottom: "8px" }} 
               />
             </div>
           </div>
 
-          <div style={{ fontWeight: "bolder", fontFamily: "Ubuntu", fontSize: "16px", marginBottom: "18px" }}>
+          <div style={{ fontWeight: 800, fontFamily: "Ubuntu", fontSize: "20px", marginBottom: 12, textAlign: 'center', color: '#2d3748' }}>
             Verify your phone number
           </div>
           
-          <div style={{ fontWeight: "lighter", fontSize: "16px", marginBottom: "16px", color: "gray" }}>
+          <div style={{ fontWeight: 400, fontSize: "14px", marginBottom: 24, color: "#718096", textAlign: 'center', lineHeight: 1.6 }}>
             To enhance your experience, we need to verify that the
             phone number associated with your account 
             belongs to you. A code will be sent to this number for verification.
@@ -83,18 +84,19 @@ export default function Mobile() {
           <div style={{ 
             display: "flex", 
             alignItems: "center", 
-            border: error ? "1px solid red" : "1px solid #ccc", 
-            borderRadius: "4px", 
-            padding: "5px",
-            marginBottom: "10px"
+            border: error ? "2px solid #e53e3e" : "2px solid #e2e8f0", 
+            borderRadius: "8px", 
+            padding: "12px",
+            marginBottom: error ? "10px" : "20px",
+            transition: 'border-color 0.3s'
           }}>
-            <div style={{ display: "flex", alignItems: "center", marginRight: "10px" }}>
+            <div style={{ display: "flex", alignItems: "center", marginRight: "12px", backgroundColor: '#f7fafc', padding: '8px 12px', borderRadius: 6 }}>
               <img
                 src="https://upload.wikimedia.org/wikipedia/en/4/41/Flag_of_India.svg"
                 alt="India Flag"
-                style={{ width: "24px", height: "16px", marginRight: "5px" }}
+                style={{ width: "24px", height: "16px", marginRight: "8px" }}
               />
-              <span style={{ fontWeight: "bold" }}>+91</span>
+              <span style={{ fontWeight: 700, color: '#4a5568' }}>+91</span>
             </div>
             <input
               type="tel"
@@ -111,31 +113,40 @@ export default function Mobile() {
                 border: "none",
                 outline: "none",
                 fontSize: "16px",
+                fontWeight: 500,
+                color: '#2d3748'
               }}
             />
           </div>
 
           {error && (
-            <div style={{ color: 'red', fontSize: '14px', marginBottom: '10px' }}>
+            <div style={{ color: '#e53e3e', fontSize: '14px', marginBottom: '16px', fontWeight: 500 }}>
               {error}
             </div>
           )}
 
-          <div style={{ fontWeight: "lighter", fontSize: "14px", marginBottom: "16px", color: "gray" }}>
-            <p>
+          <div style={{ fontWeight: 400, fontSize: "12px", marginBottom: 24, color: "#718096", lineHeight: 1.5, textAlign: 'center' }}>
+            <p style={{ margin: '0 0 8px 0' }}>
               By adding my phone number, I consent to receive calls including artificial or prerecorded calls
-              from JobsSpider on the phone number provided. I also agree to receive
-              texts for phone number verification purposes and as specified in my Communications settings.
+              from JobsSpider on the phone number provided.
             </p>
-            <p>
-              If you want to change your contact number, visit your Profile. Changes to your phone 
-              number on this page will not be reflected in your profile.
+            <p style={{ margin: 0 }}>
+              If you want to change your contact number, visit your Profile.
             </p>
           </div>
 
           <Grid size={12}>
             <Button 
-              style={{ marginBottom: '7px', borderRadius: 5 }} 
+              style={{ 
+                marginBottom: '12px', 
+                borderRadius: 8,
+                padding: '14px',
+                fontWeight: 700,
+                fontSize: '16px',
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                color: '#ffffff',
+                boxShadow: '0 4px 15px rgba(102, 126, 234, 0.4)'
+              }} 
               fullWidth 
               variant="contained" 
               onClick={handleClick}
@@ -144,7 +155,17 @@ export default function Mobile() {
             </Button>
           </Grid>
           <Grid size={12}>
-            <Button fullWidth variant="text">Not now</Button>
+            <Button 
+              fullWidth 
+              variant="text"
+              style={{ 
+                color: '#718096',
+                fontWeight: 600,
+                fontSize: '14px'
+              }}
+            >
+              Not now
+            </Button>
           </Grid>
         </div>
       </div>

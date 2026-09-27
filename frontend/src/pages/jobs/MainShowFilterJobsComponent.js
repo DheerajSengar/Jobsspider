@@ -22,6 +22,10 @@ export default function ShowFilterJobsComponent() {
   const categoryid = keys.get("categoryid");
   const subcategoryid = keys.get("subcategoryid");
   const expr = keys.get("exp");
+  const keyword = keys.get("keyword");
+  const locationName = keys.get("location");
+  
+  console.log('Search params:', { skill, skill_id, categoryid, subcategoryid, expr, keyword, locationName });
   
   const [jobs, setJobsList] = useState([]);
   const [refresh, setRefresh] = useState(false);
@@ -38,7 +42,9 @@ export default function ShowFilterJobsComponent() {
           categoryid, 
           subcategoryid, 
           expr: exp, 
-          time 
+          time,
+          keyword,
+          location: locationName
         });
         setJobsList(res.data || []);
       } catch (error) {
@@ -47,7 +53,7 @@ export default function ShowFilterJobsComponent() {
       }
     };
     getJobs();
-  }, [refresh, exp, time, skill, skill_id, categoryid, subcategoryid]);
+  }, [refresh, exp, time, skill, skill_id, categoryid, subcategoryid, keyword, locationName]);
 
   return (
     <div

@@ -24,12 +24,12 @@ export default function ReadyNextPage() {
     const result = await postData('userinterface/check_account', { emailMobile });
     setLoading(false);
 
-    if (result.status && result.data && result.data.emailaddress) {
+    if (result.status) {
       const isEmail = emailMobile.includes("@");
       const status = isEmail ? "Email" : "Mobile";
       dispatch({
         type: "ADD_USER",
-        payload: { status, emailMobile: isEmail ? result.data.emailaddress : result.data.mobileno, ot: '', loginstatus: "already exist" }
+        payload: { status, emailMobile, ot: '', loginstatus: "already exist" }
       });
       setOpen(true);
     } else {

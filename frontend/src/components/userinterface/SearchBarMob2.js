@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   TextField,
   Button,
@@ -14,32 +14,72 @@ import RoomOutlinedIcon from "@mui/icons-material/RoomOutlined";
 import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
 import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
 import Header from './Header';
+import { useNavigate } from 'react-router-dom';
+import { getData } from '../../services/api/FetchNodeServices';
+
+const defaultSkills = [
+  { skillid: 1, categoryid: 1, subcategoryid: 1, skills: "Information Technology (IT) - Full Stack Developer" },
+  { skillid: 2, categoryid: 1, subcategoryid: 1, skills: "Frontend Developer (React.js / Next.js)" },
+  { skillid: 3, categoryid: 1, subcategoryid: 1, skills: "Backend Developer (Node.js / Java / Python)" },
+  { skillid: 4, categoryid: 1, subcategoryid: 2, skills: "Data Science & Data Analyst" },
+  { skillid: 5, categoryid: 2, subcategoryid: 3, skills: "Sales & Marketing - Digital Marketing" },
+  { skillid: 6, categoryid: 2, subcategoryid: 4, skills: "Business Development & Sales Executive" },
+  { skillid: 7, categoryid: 3, subcategoryid: 5, skills: "Finance & Accounting - GST / Tally" },
+  { skillid: 8, categoryid: 4, subcategoryid: 6, skills: "Human Resources (HR) & Talent Acquisition" },
+  { skillid: 9, categoryid: 5, subcategoryid: 7, skills: "Design & Creative - UI/UX Designer" },
+  { skillid: 10, categoryid: 1, subcategoryid: 1, skills: "MERN Stack Developer" }
+];
 
 export default function SearchBarMob2() {
+  const navigate = useNavigate();
+  const [skill, setSkill] = useState(null);
+  const [topSkill, setTopSkill] = useState(defaultSkills);
+  const [expr, setExpr] = useState(0);
+  const [location, setLocation] = useState(null);
+  const [keyword, setKeyword] = useState('');
 
-  const topSkill = [
-    { Skillid: 1, Skill: 'MERN' },
-    { Skillid: 2, Skill: 'Node.js' },
-    { Skillid: 3, Skill: 'React.js' },
-    { Skillid: 4, Skill: 'Angular' },
-    { Skillid: 5, Skill: 'Vue.js' },
-    { Skillid: 6, Skill: 'Python' },
-    { Skillid: 7, Skill: 'Django' },
-    { Skillid: 8, Skill: 'Ruby on Rails' },
-    { Skillid: 9, Skill: 'Java' },
-  ];
+  const fetchAllSkill = async () => {
+    try {
+      const res = await getData('userinterface/fetch_all_skills');
+      if (res && res.data && Array.isArray(res.data) && res.data.length > 0) {
+        setTopSkill(res.data);
+      } else {
+        setTopSkill(defaultSkills);
+      }
+    } catch (error) {
+      console.error('Error fetching skills:', error);
+      setTopSkill(defaultSkills);
+    }
+  };
+
+  React.useEffect(() => {
+    fetchAllSkill();
+  }, []);
+
+  const handleSearch = () => {
+    const tskill = skill ? { ...skill } : {};
+    tskill['exp'] = expr;
+    if (location?.cityname) {
+      tskill.location = location.cityname;
+    }
+    if (keyword && keyword.trim()) {
+      tskill.keyword = keyword.trim();
+    }
+    const queryString = new URLSearchParams(tskill).toString();
+    navigate(`/searchjobs?${queryString}`);
+  };
   
   const experience = [
-    { expid: 1, exp: "Fresher" },
-    { expid: 2, exp: "1 year" },
-    { expid: 3, exp: "2 years" },
-    { expid: 4, exp: "3 years" },
-    { expid: 5, exp: "4 years" },
-    { expid: 6, exp: "5 years" },
-    { expid: 7, exp: "6 years" },
-    { expid: 8, exp: "7 years" },
-    { expid: 9, exp: "8 years" },
-    { expid: 10, exp: "9+ years" },
+    { expid: 0, exp: "Fresher" },
+    { expid: 1, exp: "1 year" },
+    { expid: 2, exp: "2 years" },
+    { expid: 3, exp: "3 years" },
+    { expid: 4, exp: "4 years" },
+    { expid: 5, exp: "5 years" },
+    { expid: 6, exp: "6 years" },
+    { expid: 7, exp: "7 years" },
+    { expid: 8, exp: "8 years" },
+    { expid: 9, exp: "9+ years" },
   ];
 
   const worklocation = [
@@ -100,10 +140,16 @@ export default function SearchBarMob2() {
         <Autocomplete
           fullWidth
           sx={{ flex: 1}}
+          value={skill}
           options={topSkill}
+          onChange={(event, newValue) => setSkill(newValue)}
           PopperComponent={CustomPopper}
           autoHighlight
-          getOptionLabel={(option) => option.Skill}
+          getOptionLabel={(option) => {
+            if (!option) return "";
+            if (typeof option === 'string') return option;
+            return option.skills || option.categoryname || "";
+          }}
           renderOption={(props, option) => (
             <Box
               component="li"
@@ -115,7 +161,7 @@ export default function SearchBarMob2() {
               }}
             >
               <SearchIcon sx={{ color: "#8395a7" }} />
-              {option.Skill}
+              {option.skills || option.categoryname}
             </Box>
           )}
           
@@ -170,7 +216,13 @@ export default function SearchBarMob2() {
         {/* Experience Autocomplete */}
         <Autocomplete
           sx={{flexGrow:1 }}
+          value={experience[expr]}
           options={experience}
+          onChange={(event, newValue) => {
+            if (newValue) {
+              setExpr(newValue.expid);
+            }
+          }}
           PopperComponent={CustomPopper}
           autoHighlight
           getOptionLabel={(option) => option.exp}
@@ -235,7 +287,9 @@ export default function SearchBarMob2() {
    
         <Autocomplete
           sx={{ flexGrow:1}}
+          value={location}
           options={worklocation}
+          onChange={(event, newValue) => setLocation(newValue)}
           PopperComponent={CustomPopper}
           autoHighlight
           getOptionLabel={(option) => option.cityname}
@@ -295,6 +349,36 @@ export default function SearchBarMob2() {
         />
         </div>
 
+        <div style={{width:'100%'}}>
+        {/* Keyword Search */}
+        <TextField
+          fullWidth
+          value={keyword}
+          onChange={(e) => setKeyword(e.target.value)}
+          placeholder='Search by keyword (e.g., React, Developer)'
+          variant="standard"
+          sx={{
+            '& .MuiInputBase-input': {
+              outline: 'none', 
+              fontSize: '14px',
+            },
+          }}
+          InputProps={{
+            disableUnderline: true,
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon sx={{fontSize:15, color: "#8395a7"}} />
+              </InputAdornment>
+            ),
+          }}
+          onKeyPress={(e) => {
+            if (e.key === 'Enter') {
+              handleSearch();
+            }
+          }}
+        />
+        </div>
+
 
         <div style={{width:'100%'}}>
 
@@ -302,6 +386,7 @@ export default function SearchBarMob2() {
         {/* Search Button */}
         <Button
         fullWidth
+        onClick={handleSearch}
           sx={{
             width:'100%',
             textTransform: "capitalize",

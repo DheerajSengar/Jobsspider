@@ -24,13 +24,9 @@ router.post('/check_password', function(req, res, next) {
       }
 
       const admin = result[0];
-      let isMatch = false;
-
-      if (admin.password.startsWith('$2a$') || admin.password.startsWith('$2b$')) {
-        isMatch = await bcrypt.compare(password, admin.password);
-      } else {
-        isMatch = (admin.password === password);
-      }
+      const isMatch = typeof admin.password === 'string' && admin.password.startsWith('$2')
+        ? await bcrypt.compare(password, admin.password)
+        : false;
 
       if (isMatch) {
         const token = generateToken({ adminid: admin.adminid, emailid: admin.emailid, role: 'admin' });

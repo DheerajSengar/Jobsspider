@@ -6,7 +6,6 @@ var { verifyAdmin } = require('../middleware/authMiddleware');
 
 /* GET home page. */
 router.post('/submit_company', verifyAdmin, upload.single('icon'), function (req, res, next) {
-    console.log(req.body)
     try {
         pool.query("insert into companies (companyname, companyowner, companyaddress, stateid, cityid, emailid, mobileno, contactperson, aboutcompany, registrationno, pancard, password, verified, logo) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [req.body.companyname, req.body.companyowner, req.body.companyaddress, req.body.stateid, req.body.cityid, req.body.emailid, req.body.mobileno, req.body.contactperson, req.body.aboutcompany, req.body.registrationno, req.body.pancard, req.body.password, req.body.verified, req.file.filename], function (error, result) {
             if (error) {
@@ -26,7 +25,6 @@ router.post('/submit_company', verifyAdmin, upload.single('icon'), function (req
 
 
 router.post('/update_company_verify', verifyAdmin, function (req, res, next) {
-    console.log(req.body)
     try {
         pool.query("update companies  set verified=? where companyid=?", [req.body.verified, req.body.companyid], function (error, result) {
             if (error) {
@@ -86,7 +84,6 @@ router.post('/edit_company_data', verifyAdmin, upload.single('icon'), function (
 
 router.post('/edit_company_picture', verifyAdmin, upload.single('icon'), function (req, res, next) {
     try {
-        console.log("BODY:", req.body)
         pool.query("update companies set logo=? where companyid=?", [req.file.filename, req.body.companyid], function (error, result) {
             if (error) {
                 console.log(error)

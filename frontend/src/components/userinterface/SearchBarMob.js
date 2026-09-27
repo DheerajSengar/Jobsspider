@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   TextField,
   Button,
@@ -8,23 +8,26 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import SearchBarMob2 from './SearchBarMob2';
-import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 
 
-export default function SearchBarMob() {
+export default function SearchBarMob({ param_skill, refresh, setRefresh }) {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("sm"));
   const navigate=useNavigate();
+  const [keyword, setKeyword] = useState('');
 
-  const [open,setOpen]=useState(false)
   const handlefield=()=>{
-    //  alert("rrrrr")
-    setOpen(true);
-    <SearchBarMob2 />
-   navigate('/searchbarmob2')
-   
+    const tskill = param_skill ? { ...param_skill } : {};
+    if (keyword && keyword.trim()) {
+      tskill.keyword = keyword.trim();
+    }
+    const queryString = new URLSearchParams(tskill).toString();
+    navigate(`/searchjobs?${queryString}`);
+    
+    if (setRefresh) {
+      setRefresh(!refresh);
+    }
   }
   return (
     <div style={{ padding: "15px", width: matches ? 'auto' : '100%' }}>
@@ -41,7 +44,8 @@ export default function SearchBarMob() {
       >
         {/* TextField for skill */}
         <TextField
-          onClick={()=>handlefield(open)}
+          value={keyword}
+          onChange={(e) => setKeyword(e.target.value)}
           fullWidth
           placeholder='Search a  "Jobs" '
           variant="standard"
@@ -60,11 +64,17 @@ export default function SearchBarMob() {
               </InputAdornment>
             ),
           }}
+          onKeyPress={(e) => {
+            if (e.key === 'Enter') {
+              handlefield();
+            }
+          }}
         />
         <Divider orientation="vertical" flexItem />
 
         {/* Search Button */}
         <Button
+          onClick={handlefield}
           sx={{
             textTransform: "capitalize",
             fontSize: 14,

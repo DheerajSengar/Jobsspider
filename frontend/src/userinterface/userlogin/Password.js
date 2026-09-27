@@ -4,17 +4,19 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { postData } from "../../services/api/FetchNodeServices";
+import { useDispatch } from "react-redux";
 import Swal from 'sweetalert2';
 
 export default function Password() {
   const classes = homeStyles();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const location = useSelector(state => state.user);
   const [password, setPassword] = useState('');
 
   const handleSubmit = async () => {
-    if (!password || password.length < 6) {
-      Swal.fire('Password Required', 'Please enter a password with at least 6 characters.', 'warning');
+    if (!password || password.length < 8) {
+      Swal.fire('Password Required', 'Please enter a password with at least 8 characters.', 'warning');
       return;
     }
 
@@ -27,6 +29,7 @@ export default function Password() {
 
     const result = await postData("userinterface/insert_record", body);
     if (result.status) {
+      dispatch({ type: 'ADD_USER', payload: result.data, token: result.token });
       Swal.fire({
         icon: 'success',
         title: 'Account Created!',
@@ -73,7 +76,7 @@ export default function Password() {
           <TextField
             type="password"
             onChange={(e)=>setPassword(e.target.value)}
-            label="Password (min 6 characters)"
+            label="Password (min 8 characters)"
             placeholder="Password"
             fullWidth
             required
