@@ -14,29 +14,43 @@ export default function UserReviewComponent(){
       ]
  return(
  <div style={{width:"100%", display:'flex',flexDirection:matches?'column':'row' , height:"auto"}}>
-    <div style={{width:matches?"100%":"30%", height:"475px",background:"#218c74"}} >
-    <div >
-    <img src={invertQuote} style={{width:"80px",height:"80px", marginLeft:"80px",marginTop:"35px"}} alt="Quote Icon" />
+    <div style={{width:matches?"100%":"30%", height:"475px",background:"linear-gradient(135deg, #667eea 0%, #764ba2 100%)", position: 'relative', overflow: 'hidden'}} >
+    <div style={{position: 'absolute', top: -50, right: -50, width: 200, height: 200, borderRadius: '50%', background: 'rgba(255, 255, 255, 0.1)', filter: 'blur(40px)'}}></div>
+    <div style={{position: 'absolute', bottom: -30, left: -30, width: 150, height: 150, borderRadius: '50%', background: 'rgba(255, 255, 255, 0.08)', filter: 'blur(30px)'}}></div>
+    <div style={{position: 'relative', zIndex: 1}}>
+    <img src={invertQuote} style={{width:"90px",height:"90px", marginLeft:matches?"20px":"80px",marginTop:"45px", opacity: 0.9}} alt="Quote Icon" />
     </div>
-    <div style={{fontSize:28,fontWeight:'bolder',marginTop:"40px", fontFamily:"Ubuntu", color:"#fff",marginLeft:"80px", lineHeight:1.6}}>
+    <div style={{fontSize:matches?"24px":"32px",fontWeight:900,marginTop:"50px", fontFamily:"Ubuntu", color:"#fff",marginLeft:matches?"20px":"80px", lineHeight:1.4, position: 'relative', zIndex: 1}}>
    <p>
     Join the community of<br/>
      5 crore satisfied<br/> 
      job seekers...
     </p>
     </div>
-    <div style={{fontSize:17,marginTop:"40px", fontFamily:"Ubuntu", color:"#fff",marginLeft:"80px" ,display:"flex", }}>
-        <span>Play Store Ratings</span>
-        <div style={{marginLeft:"7px"}}>
-        <Stack spacing={1} style={{marginLeft:"10px"}}>
-             
-             <Rating name="half-rating-read" defaultValue={5} precision={0.5} readOnly />
+    <div style={{fontSize:matches?"15px":"18px",marginTop:"50px", fontFamily:"Ubuntu", color:"rgba(255, 255, 255, 0.9)",marginLeft:matches?"20px":"80px" ,display:"flex", alignItems: 'center', position: 'relative', zIndex: 1}}>
+        <span style={{fontWeight: 600}}>Play Store Ratings</span>
+        <div style={{marginLeft:"12px"}}>
+        <Stack spacing={1}>
+             <Rating 
+               name="half-rating-read" 
+               defaultValue={5} 
+               precision={0.5} 
+               readOnly 
+               sx={{
+                 '& .MuiRating-iconFilled': {
+                   color: '#ffd700',
+                 },
+                 '& .MuiRating-iconEmpty': {
+                   color: 'rgba(255, 255, 255, 0.3)',
+                 }
+               }}
+             />
            </Stack>
         </div>
     </div>
 </div>
 
-<div style={{width:matches?"100%":"70%",backgroundColor:"#f4fdf6",display:'flex',justifyContent:'center',alignItems:'center'}}>
+<div style={{width:matches?"100%":"70%",backgroundColor:"linear-gradient(145deg, #f8f9fa 0%, #e9ecef 100%)",display:'flex',justifyContent:'center',alignItems:'center', padding: matches ? '20px' : '40px'}}>
     <ReviewScroll  data={user_review}/>
 
 </div>

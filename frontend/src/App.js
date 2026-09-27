@@ -1,6 +1,7 @@
 import LoginPage from "./admin/login/LoginPage";
 import DashboardAdmin from "./admin/login/DashboardAdmin";
 import CompanyVerification from "./admin/companies/CompanyVerification";
+import CompanyLoginPage from "./admin/companies/CompanyLoginPage";
 import HomePage from "./pages/HomePage";
 import SearchBarMob2 from "./components/userinterface/SearchBarMob2";
 import MainShowFilterJobsComponent from "./pages/jobs/MainShowFilterJobsComponent";
@@ -22,6 +23,7 @@ function App() {
       <Router>
         <Routes>
           <Route element={<LoginPage />} path="/loginpage" />
+          <Route element={<CompanyLoginPage />} path="/companylogin" />
           <Route
             element={<CompanyVerification />}
             path="/companyverification"

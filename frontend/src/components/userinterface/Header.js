@@ -97,10 +97,13 @@ export default function Header() {
         </Box>
         <Divider />
         <MenuItem onClick={() => navigate('/searchjobs')}>
-          <WorkOutlineIcon style={{ marginRight: 8, fontSize: 20, color: '#0d6efd' }} /> Browse Jobs
+          <WorkOutlineIcon style={{ marginRight: 8, fontSize: 20, color: '#667eea' }} /> Browse Jobs
+        </MenuItem>
+        <MenuItem onClick={() => navigate('/companylogin')}>
+          <AccountBoxIcon style={{ marginRight: 8, fontSize: 20, color: '#667eea' }} /> Employer Portal
         </MenuItem>
         <MenuItem onClick={() => navigate('/loginpage')}>
-          <AccountBoxIcon style={{ marginRight: 8, fontSize: 20, color: '#b03a84' }} /> Admin Portal
+          <AccountBoxIcon style={{ marginRight: 8, fontSize: 20, color: '#764ba2' }} /> Admin Portal
         </MenuItem>
         <Divider />
         <MenuItem onClick={userLogout} style={{ color: '#d32f2f' }}>
@@ -208,7 +211,7 @@ export default function Header() {
                     border: '2px solid #667eea'
                   }
                 }}
-                onClick={() => navigate('/loginpage')}
+                onClick={() => navigate('/companylogin')}
               >
                 Employer / Admin Login
               </Button>

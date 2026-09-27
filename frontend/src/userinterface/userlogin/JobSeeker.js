@@ -20,11 +20,8 @@ export default function JobSeeker() {
     }
 
     const handleEmployer=()=>{
-      // For now, navigate to the same flow. This can be customized later
-      if(status === "Mobile")
-      navigate("/mobileotp")
-      else
-      navigate("/emailverify")
+      // Navigate to company login or registration for recruiters
+      navigate("/loginpage")
     }
   return (
     <div style={{backgroundColor:"linear-gradient(135deg, #667eea 0%, #764ba2 100%)", minHeight: '100vh'}}>

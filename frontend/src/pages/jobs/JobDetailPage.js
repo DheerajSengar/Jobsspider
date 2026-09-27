@@ -55,7 +55,7 @@ export default function JobDetailPage() {
     const loadDetails = async () => {
       setLoading(true);
       try {
-        const res = await postData("companyjobs/fetch_job_by_id", { jobid });
+        const res = await getData(`userinterface/job_details/${jobid}`);
         if (res.status && res.data) {
           setJob(res.data);
           if (user && user.mobileno) {
@@ -71,7 +71,7 @@ export default function JobDetailPage() {
       }
 
       try {
-        const resRel = await getData("userinterface/trending_jobs");
+        const resRel = await getData(`userinterface/related_jobs/${jobid}`);
         if (resRel.status && resRel.data) {
           setRelatedJobs(resRel.data.slice(0, 4));
         }
@@ -333,7 +333,7 @@ export default function JobDetailPage() {
               }}>
                 <PaymentsOutlinedIcon style={{ fontSize: 18, color: '#059669' }} />
                 <span style={{ fontSize: 14, color: '#065f46', fontWeight: 700 }}>
-                  â‚¹{formatSalary(job.minsalary)} - â‚¹{formatSalary(job.maxsalary)} / year
+                  ₹{formatSalary(job.minsalary)} - ₹{formatSalary(job.maxsalary)} / year
                 </span>
               </div>
               {job.postdate && (
@@ -396,7 +396,7 @@ export default function JobDetailPage() {
                   boxShadow: applied ? 'none' : '0 4px 14px rgba(37,99,235,0.3)'
                 }}
               >
-                {applied ? 'Applied âœ“' : applying ? 'Submitting...' : 'Apply Now'}
+                {applied ? 'Applied ✓' : applying ? 'Submitting...' : 'Apply Now'}
               </Button>
               <Button
                 variant="outlined"
@@ -681,7 +681,7 @@ export default function JobDetailPage() {
                   boxShadow: applied ? 'none' : '0 4px 14px rgba(37,99,235,0.3)'
                 }}
               >
-                {applied ? 'Applied âœ“' : applying ? 'Submitting...' : 'Apply Now'}
+                {applied ? 'Applied ✓' : applying ? 'Submitting...' : 'Apply Now'}
               </Button>
               <div style={{ display: 'flex', gap: 8 }}>
                 <Button variant="outlined" fullWidth onClick={handleSaveJob}

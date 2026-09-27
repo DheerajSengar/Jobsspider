@@ -111,7 +111,7 @@ router.get('/fetch_all_city', function (req, res, next) {
 
 router.get('/display_all', function (req, res, next) {
     try {
-        pool.query("select C.*,(select CA.categoryname from category CA where CA.categoryid=C.categoryid) as categoryname, (select SC.subcategoryname from subcategory SC where SC.subcategoryid=C.subcategoryid) as subcategoryname from company_jobs C", function (error, result) {
+        pool.query("select C.*, CM.companyname, CM.logo as companylogo, (select CA.categoryname from category CA where CA.categoryid=C.categoryid) as categoryname, (select SC.subcategoryname from subcategory SC where SC.subcategoryid=C.subcategoryid) as subcategoryname from company_jobs C INNER JOIN companies CM ON C.companyid = CM.companyid", function (error, result) {
             if (error) {
                 console.log(error)
                 res.status(500).json({ status: false, message: 'Database Error...pls Contact with DBA...' })
@@ -147,6 +147,33 @@ router.post('/edit_companyjobs_data', verifyAdmin, function (req, res, next) {
         res.status(200).json({ status: false, message: 'There is Technical issue...pls contact with server Admistrator... ' })
     }
 
+});
+
+// Fetch single job by ID
+router.post('/fetch_job_by_id', function (req, res, next) {
+    try {
+        const { jobid } = req.body;
+        if (!jobid) {
+            return res.status(400).json({ status: false, message: 'Job ID is required' });
+        }
+
+        pool.query(
+            "SELECT C.*, CM.companyname, CM.logo as companylogo, CM.aboutcompany, CM.companyaddress, CM.contactperson, CM.emailid as company_email, CM.mobileno as company_mobile, (select CA.categoryname from category CA where CA.categoryid=C.categoryid) as categoryname, (select SC.subcategoryname from subcategory SC where SC.subcategoryid=C.subcategoryid) as subcategoryname FROM company_jobs C INNER JOIN companies CM ON C.companyid = CM.companyid WHERE C.jobid = ?",
+            [jobid],
+            function (error, result) {
+                if (error) {
+                    console.log(error);
+                    res.status(500).json({ status: false, message: 'Database Error... Please contact DBA.' });
+                } else if (result.length === 0) {
+                    res.status(404).json({ status: false, message: 'Job not found' });
+                } else {
+                    res.status(200).json({ status: true, message: 'Success', data: result[0] });
+                }
+            }
+        );
+    } catch (e) {
+        res.status(500).json({ status: false, message: 'There is a Technical issue... Please contact the server Administrator.' });
+    }
 });
 
 

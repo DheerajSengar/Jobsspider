@@ -11,17 +11,22 @@ export default function DownloadJobsSpider() {
   const matches = useMediaQuery(theme.breakpoints.down("sm"));
   return (
     <Paper
+      elevation={4}
       style={{
         width: matches ? "95%" : "80%",
-        height: matches ? "650px" : "400px",
-        borderRadius: 18,
-        background: "#f9f4ff",
-        border: `1px solid #e5e7eb`,
+        height: matches ? "700px" : "420px",
+        borderRadius: 24,
+        background: "linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%)",
+        border: `2px solid rgba(102, 126, 234, 0.2)`,
         display: "flex",
         flexDirection: matches ? "column" : "row",
         position: "relative",
+        boxShadow: '0 10px 40px rgba(102, 126, 234, 0.15)',
+        overflow: 'hidden'
       }}
     >
+      <div style={{position: 'absolute', top: -50, right: -50, width: 200, height: 200, borderRadius: '50%', background: 'rgba(102, 126, 234, 0.1)', filter: 'blur(50px)'}}></div>
+      <div style={{position: 'absolute', bottom: -30, left: -30, width: 150, height: 150, borderRadius: '50%', background: 'rgba(118, 75, 162, 0.1)', filter: 'blur(40px)'}}></div>
       <div
         style={{
           width: matches ? "80%" : "55%",
@@ -30,6 +35,8 @@ export default function DownloadJobsSpider() {
           justifyContent: matches ? "start" : "center",
           alignItems: "center",
           margin: matches ? "30px" : 0,
+          position: 'relative',
+          zIndex: 1
         }}
       >
         <div
@@ -52,47 +59,49 @@ export default function DownloadJobsSpider() {
           >
             <div
               style={{
-                fontSize: matches ? 30 : 42,
-                color: "rgb(81 33 148)",
-                fontWeight: "bold",
+                fontSize: matches ? 32 : 48,
+                color: "#667eea",
+                fontWeight: 900,
+                fontFamily: 'Ubuntu',
+                lineHeight: 1.2
               }}
             >
               Download JobsSpider app!
             </div>
             {matches ? (
-              <div style={{ fontSize: 15, fontWeight: 600 }}>
-                <ul>
-                  <li style={{ marginBottom: 15 }}>
-                    Unlimited job applications
+              <div style={{ fontSize: 16, fontWeight: 600, color: '#4a5568' }}>
+                <ul style={{listStyle: 'none', padding: 0}}>
+                  <li style={{ marginBottom: 12, display: 'flex', alignItems: 'center'}}>
+                    <span style={{color: '#667eea', marginRight: 8}}>✓</span> Unlimited job applications
                   </li>
-                  <li style={{ marginBottom: 15 }}>HRs contact you directly</li>
-                  <li style={{ marginBottom: 15 }}>Track your Applications</li>
+                  <li style={{ marginBottom: 12, display: 'flex', alignItems: 'center'}}>HRs contact you directly</li>
+                  <li style={{ marginBottom: 12, display: 'flex', alignItems: 'center'}}>Track your Applications</li>
                 </ul>
               </div>
             ) : (
               <div
                 style={{
-                  fontSize: 17,
+                  fontSize: 18,
                   fontWeight: 600,
                   display: "flex",
                   flexDirection: matches ? "column" : "row",
+                  color: '#4a5568',
+                  alignItems: 'center'
                 }}
               >
-                <div> Unlimited job applications</div>
+                <div style={{display: 'flex', alignItems: 'center'}}><span style={{color: '#667eea', marginRight: 6, fontSize: 20}}>✓</span> Unlimited job applications</div>
                 <Divider
                   orientation="vertical"
                   flexItem
-                  color="black"
-                  style={{ marginLeft: 6, marginRight: 6 }}
+                  style={{ marginLeft: 12, marginRight: 12, borderColor: 'rgba(102, 126, 234, 0.3)' }}
                 />
-                <div>HRs contact you directly</div>
+                <div style={{display: 'flex', alignItems: 'center'}}><span style={{color: '#667eea', marginRight: 6, fontSize: 20}}>✓</span> HRs contact you directly</div>
                 <Divider
                   orientation="vertical"
                   flexItem
-                  color="black"
-                  style={{ marginLeft: 6, marginRight: 6 }}
+                  style={{ marginLeft: 12, marginRight: 12, borderColor: 'rgba(102, 126, 234, 0.3)' }}
                 />
-                <div>Track your Applications</div>
+                <div style={{display: 'flex', alignItems: 'center'}}><span style={{color: '#667eea', marginRight: 6, fontSize: 20}}>✓</span> Track your Applications</div>
               </div>
             )}
           </div>
@@ -102,27 +111,30 @@ export default function DownloadJobsSpider() {
             <div
               style={{
                 display: "flex",
-                background: "rgb(255 255 255)",
-                width: 280,
-                padding: 10,
-                borderRadius: 15,
+                background: "rgba(255, 255, 255, 0.9)",
+                width: 300,
+                padding: 16,
+                borderRadius: 16,
+                border: '1px solid rgba(102, 126, 234, 0.2)',
+                boxShadow: '0 4px 15px rgba(102, 126, 234, 0.1)'
               }}
             >
               <div
                 style={{
-                  fontSize: 18,
-                  fontWeight: 600,
+                  fontSize: 16,
+                  fontWeight: 700,
                   width: "60%",
                   alignSelf: "center",
                   padding: 10,
+                  color: '#1a202c'
                 }}
               >
-                Scan QR to download Apna app
+                Scan QR to download JobsSpider app
               </div>
-              <div style={{ padding: 10, width: "50%" }}>
+              <div style={{ padding: 10, width: "40%" }}>
                 <img
                   src={`${serverURL}/images/fullstack.png`}
-                  style={{ width: "100%", borderRadius: 10 }}
+                  style={{ width: "100%", borderRadius: 12 }}
                   alt="QR Code"
                 />
               </div>
@@ -176,30 +188,34 @@ export default function DownloadJobsSpider() {
           >
             <div
               style={{
-                backgroundColor: "#f3ebff",
+                backgroundColor: "rgba(102, 126, 234, 0.15)",
                 height: matches ? "43%" : "40%",
                 width: "100%",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                borderRadius: 5,
-                color: "#6d0090",
+                borderRadius: 12,
+                color: "#667eea",
+                border: '1px solid rgba(102, 126, 234, 0.3)',
+                transition: 'all 0.3s ease',
+                cursor: 'pointer'
               }}
             >
               <div style={{ width: "80%", height: "70%" }}>
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <StarIcon
                     style={{
-                      color: "#ffd166",
-                      width: 35,
-                      height: matches ? 35 : 40,
-                      marginRight: 8,
+                      color: "#ffd700",
+                      width: matches ? 32 : 40,
+                      height: matches ? 32 : 40,
+                      marginRight: 10,
                     }}
                   />
                   <div
                     style={{
-                      fontSize: matches ? 25 : 30,
-                      fontWeight: "bold",
+                      fontSize: matches ? 28 : 36,
+                      fontWeight: 900,
+                      color: '#1a202c'
                     }}
                   >
                     4.4
@@ -208,10 +224,11 @@ export default function DownloadJobsSpider() {
                 <div
                   style={{
                     fontSize: matches ? 16 : 18,
-                    fontWeight: 600,
+                    fontWeight: 700,
                     display: "flex",
                     alignItems: "center",
-                    opacity: 0.9,
+                    color: '#4a5568',
+                    marginTop: 4
                   }}
                 >
                   5L reviews
@@ -221,14 +238,17 @@ export default function DownloadJobsSpider() {
 
             <div
               style={{
-                backgroundColor: "#f3ebff",
+                backgroundColor: "rgba(118, 75, 162, 0.15)",
                 height: matches ? "43%" : "40%",
                 width: "100%",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                borderRadius: 5,
-                color: "#6d0090",
+                borderRadius: 12,
+                color: "#764ba2",
+                border: '1px solid rgba(118, 75, 162, 0.3)',
+                transition: 'all 0.3s ease',
+                cursor: 'pointer'
               }}
             >
               <div
@@ -240,15 +260,17 @@ export default function DownloadJobsSpider() {
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <DownloadForOfflineOutlinedIcon
                     style={{
-                      width: 35,
-                      height: matches ? 35 : 40,
-                      marginRight: 8,
+                      width: matches ? 32 : 40,
+                      height: matches ? 32 : 40,
+                      marginRight: 10,
+                      color: '#764ba2'
                     }}
                   />
                   <div
                     style={{
-                      fontSize: matches ? 25 : 30,
-                      fontWeight: "bold",
+                      fontSize: matches ? 28 : 36,
+                      fontWeight: 900,
+                      color: '#1a202c'
                     }}
                   >
                     1 cr+
@@ -257,10 +279,11 @@ export default function DownloadJobsSpider() {
                 <div
                   style={{
                     fontSize: matches ? 16 : 18,
-                    fontWeight: 600,
+                    fontWeight: 700,
                     display: "flex",
                     alignItems: "center",
-                    opacity: 0.9,
+                    color: '#4a5568',
+                    marginTop: 4
                   }}
                 >
                   App download

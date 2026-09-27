@@ -2,7 +2,49 @@ var express = require('express');
 var router = express.Router();
 var upload = require('./multer');
 var pool = require('./pool');
-var { verifyAdmin } = require('../middleware/authMiddleware');
+var bcrypt = require("bcryptjs");
+var { verifyAdmin, generateToken } = require('../middleware/authMiddleware');
+
+// Company login
+router.post('/check_password', function(req, res, next) {
+  const { emailid, password } = req.body;
+  if (!emailid || !password) {
+    return res.status(400).json({ status: false, message: 'Email/Mobile and password are required' });
+  }
+
+  pool.query(
+    "SELECT * FROM companies WHERE emailid=? OR mobileno=?",
+    [emailid, emailid],
+    async function(error, result) {
+      if (error) {
+        console.error(error);
+        return res.status(500).json({ status: false, message: 'Database Error. Please contact DBA.' });
+      }
+
+      if (result.length === 0) {
+        return res.status(200).json({ status: false, data: [], message: 'Invalid Email ID / Mobile / Password' });
+      }
+
+      const company = result[0];
+      const isMatch = typeof company.password === 'string' && company.password.startsWith('$2')
+        ? await bcrypt.compare(password, company.password)
+        : false;
+
+      if (isMatch) {
+        const token = generateToken({ companyid: company.companyid, emailid: company.emailid, role: 'company' });
+        delete company.password;
+        return res.status(200).json({
+          status: true,
+          data: company,
+          token: token,
+          message: 'Success'
+        });
+      } else {
+        return res.status(200).json({ status: false, data: [], message: 'Invalid Email ID / Mobile / Password' });
+      }
+    }
+  );
+});
 
 /* GET home page. */
 router.post('/submit_company', verifyAdmin, upload.single('icon'), function (req, res, next) {
